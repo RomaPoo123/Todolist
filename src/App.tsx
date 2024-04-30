@@ -1,24 +1,50 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Todolist } from './components/todolist/Todolist';
+
+
+type TaskType = {
+  id: number
+  title: string
+  isDone: boolean
+}
+
+export type TodolistsType = {
+  title: string
+  tasks: Array<TaskType>
+}
+
+export let listArray: Array<TodolistsType> = [
+  {
+    title: "What to lean",
+    tasks: [
+      { id: 1, title: "CSS&HTML", isDone: true },
+      { id: 2, title: "JavaScript", isDone: true },
+      { id: 3, title: "React", isDone: false },
+    ]
+  },
+  {
+    title: "What to see",
+    tasks: [
+      { id: 1, title: "Batman", isDone: true },
+      { id: 2, title: "Spider-man", isDone: false },
+      { id: 3, title: "Game of Thrones", isDone: false },
+    ]
+  },
+]
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {listArray.map(list => {
+        return (
+          <Todolist list={list} />
+        )
+      })
+      }
+
     </div>
   );
 }
