@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Todolist } from './components/todolist/Todolist';
-
+import { v1 } from 'uuid';
 /*  Типизация большого обьекта, в котором хранятся тудулисты
 
 type TodolistsType = {
@@ -12,7 +12,7 @@ type TodolistsType = {
 }
 */
 export type TaskType = {
-  id: number
+  id: string
   title: string
   isDone: boolean
 }
@@ -46,11 +46,13 @@ function App() {
   */
   //  logic
   const [tasks, setTasks] = React.useState([
-    { id: 1, title: "CSS&HTML", isDone: true },
-    { id: 2, title: "JavaScript", isDone: true },
-    { id: 3, title: "React", isDone: false },
+    { id: v1(), title: "CSS&HTML", isDone: true },
+    { id: v1(), title: "JavaScript", isDone: true },
+    { id: v1(), title: "React", isDone: false },
+    { id: v1(), title: "GraphQL", isDone: false },
+    { id: v1(), title: "Rest API", isDone: false },
   ])
-  console.log(typeof tasks);
+  console.log(tasks);
 
   const [filter, setFilter] = React.useState<FilterValueType>("All")
 
@@ -70,16 +72,25 @@ function App() {
   }
   let FilterNewArr: Array<TaskType> = filterTasks(tasks, filter)
 
-  function removeTask(id: number) {
+  function removeTask(id: string) {
     let newTasksState = tasks.filter(task => task.id !== id)
     setTasks(newTasksState);
-
+  }
+  function addTask(title: string) {
+    let newTask: TaskType = { id: v1(), title: title, isDone: false }
+    setTasks([newTask, ...tasks])
   }
 
 
   return (
     <div className="App">
-      <Todolist title={"what to lean"} tasks={FilterNewArr} removeTask={removeTask} cahgeFilter={cahgeFilter} />
+      <Todolist
+        title={"what to lean"}
+        tasks={FilterNewArr}
+        removeTask={removeTask}
+        cahgeFilter={cahgeFilter}
+        addTask={addTask}
+      />
       {/*  {listArray.map(list => {
         return (
           <Todolist list={list} />
