@@ -56,9 +56,12 @@ function App() {
 
   const [filter, setFilter] = React.useState<FilterValueType>("All")
 
+  const [error, setError] = useState<string | null>(null)
+
   const cahgeFilter = (filter: FilterValueType) => {
     setFilter(filter)
   }
+
 
   function filterTasks(allTask: Array<TaskType>, filter: FilterValueType) {
     switch (filter) {
@@ -77,19 +80,33 @@ function App() {
     setTasks(newTasksState);
   }
   function addTask(title: string) {
-    let newTask: TaskType = { id: v1(), title: title, isDone: false }
+    if (title.trim() === "") {
+      setError("Title is required")
+      return
+    }
+    let newTask: TaskType = { id: v1(), title: title.trim(), isDone: false }
     setTasks([newTask, ...tasks])
   }
 
+  function changeStatus(taskId: string, isDone: boolean) {
+    let task: TaskType | undefined = tasks.find(t => t.id === taskId);
+    if (task) { task.isDone = isDone }
+    setTasks([...tasks]);
+
+  }
 
   return (
     <div className="App">
       <Todolist
         title={"what to lean"}
         tasks={FilterNewArr}
+        error={error}
+        filter={filter}
         removeTask={removeTask}
         cahgeFilter={cahgeFilter}
         addTask={addTask}
+        changeTaskStatus={changeStatus}
+        setError={setError}
       />
       {/*  {listArray.map(list => {
         return (
