@@ -3,12 +3,13 @@ import { TaskType, FilterValueType } from "../../App"
 
 
 type TodolistPropsType = {
+    id: string
     title: string
     tasks: Array<TaskType>
     error: string | null
     filter: FilterValueType
     removeTask: (id: string) => void
-    cahgeFilter: (filter: FilterValueType) => void
+    cahgeFilter: (todolistId: string, filter: FilterValueType) => void
     addTask: (title: string) => void
     changeTaskStatus: (taskId: string, isDone: boolean) => void
     setError: (error: string | null) => void
@@ -16,7 +17,7 @@ type TodolistPropsType = {
 }
 
 
-export const Todolist = ({ title, tasks, error, filter, removeTask, cahgeFilter, addTask, changeTaskStatus, setError }: TodolistPropsType) => {
+export const Todolist = ({ id, title, tasks, error, filter, removeTask, cahgeFilter, addTask, changeTaskStatus, setError }: TodolistPropsType) => {
 
     const [newTaskTitle, setNewTaskTitle] = useState<string>("")
     // logic 
@@ -59,9 +60,9 @@ export const Todolist = ({ title, tasks, error, filter, removeTask, cahgeFilter,
         setNewTaskTitle("")
     }
     // FilterHandlers
-    const onAllClickHandler = () => cahgeFilter("All")
-    const onActivelClickHandler = () => cahgeFilter("Active")
-    const onCompletedClickHandler = () => cahgeFilter("Completed")
+    const onAllClickHandler = () => cahgeFilter(id, "all")
+    const onActivelClickHandler = () => cahgeFilter(id, "active")
+    const onCompletedClickHandler = () => cahgeFilter(id, "completed")
 
 
     // UI
@@ -80,9 +81,9 @@ export const Todolist = ({ title, tasks, error, filter, removeTask, cahgeFilter,
             </div>
             {tasksList}
             <div>
-                <button className={filter === "All" ? "active-filter" : ""} onClick={onAllClickHandler}>All</button>
-                <button className={filter === "Active" ? "active-filter" : ""} onClick={onActivelClickHandler}>Active</button>
-                <button className={filter === "Completed" ? "active-filter" : ""} onClick={onCompletedClickHandler}>Completed</button>
+                <button className={filter === "all" ? "active-filter" : ""} onClick={onAllClickHandler}>All</button>
+                <button className={filter === "active" ? "active-filter" : ""} onClick={onActivelClickHandler}>Active</button>
+                <button className={filter === "completed" ? "active-filter" : ""} onClick={onCompletedClickHandler}>Completed</button>
             </div>
         </div>
     )

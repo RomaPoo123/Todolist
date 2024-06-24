@@ -1,118 +1,111 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { Todolist } from './components/todolist/Todolist';
 import { v1 } from 'uuid';
-/*  Типизация большого обьекта, в котором хранятся тудулисты
 
-type TodolistsType = {
-  id:number
-  title: string
-  tasks: Array<TaskType>
-}
-*/
+// Types
+export type FilterValueType = "all" | "active" | "completed"
+
 export type TaskType = {
   id: string
   title: string
   isDone: boolean
 }
 
-export type FilterValueType = "All" | "Active" | "Completed"
+type TodolistType = {
+  id: string
+  title: string
+  filter: FilterValueType
+}
+
+type TasksType = {
+  [todolistId: string]: TaskType[]
+}
+
+
 
 
 function App() {
-  // Data
-  /* Обьект с тудулистами
-    let listArray: Array<TodolistsType> = [
-      { 
-        id: 1,
-        title: "What to lean",
-        tasks: [
-          { id: 1, title: "CSS&HTML", isDone: true },
-          { id: 2, title: "JavaScript", isDone: true },
-          { id: 3, title: "React", isDone: false },
-        ]
-      },
-      {
-        id: 2,
-        title: "What to see",
-        tasks: [
-          { id: 1, title: "Batman", isDone: true },
-          { id: 2, title: "Spider-man", isDone: false },
-          { id: 3, title: "Game of Thrones", isDone: false },
-        ]
-      },
-    ]
-  */
-  //  logic
-  const [tasks, setTasks] = React.useState([
-    { id: v1(), title: "CSS&HTML", isDone: true },
-    { id: v1(), title: "JavaScript", isDone: true },
-    { id: v1(), title: "React", isDone: false },
-    { id: v1(), title: "GraphQL", isDone: false },
-    { id: v1(), title: "Rest API", isDone: false },
-  ])
-  console.log(tasks);
 
-  const [filter, setFilter] = React.useState<FilterValueType>("All")
+  // Data (исходные данные)
+  let todolistId_1 = v1();
+  let todolistId_2 = v1();
+
+  const [todolists, setTodolists] = useState<TodolistType[]>([
+    { id: todolistId_1, title: "what to lean", filter: "all" },
+    { id: todolistId_2, title: "what to see", filter: "all" },
+  ])
+
+  const [tasks, setTasks] = useState<TasksType>({
+    [todolistId_1]: [
+      { id: v1(), title: "CSS&HTML", isDone: true },
+      { id: v1(), title: "JavaScript", isDone: true },
+      { id: v1(), title: "React", isDone: false },
+    ],
+    [todolistId_2]: [
+      { id: v1(), title: "Game of Thrones", isDone: true },
+      { id: v1(), title: "Spider-man", isDone: true },
+      { id: v1(), title: "Batman", isDone: false },
+    ]
+  })
 
   const [error, setError] = useState<string | null>(null)
 
-  const cahgeFilter = (filter: FilterValueType) => {
-    setFilter(filter)
-  }
-
-
+  // logic (логика приложения)
+  // Фильтрация тасок filter
   function filterTasks(allTask: Array<TaskType>, filter: FilterValueType) {
     switch (filter) {
-      case "Active":
+      case "active":
         return allTask.filter(task => task.isDone !== true)
-      case "Completed":
+      case "completed":
         return allTask.filter(task => task.isDone !== false)
       default:
         return allTask
     }
   }
-  let FilterNewArr: Array<TaskType> = filterTasks(tasks, filter)
-
+  const cahgeFilter = (todolistId: string, filter: FilterValueType) => {
+    setTodolists(todolists.map(el => el.id === todolistId ? { ...el, filter } : el))
+  }
+  // Удаление тасок remove
   function removeTask(id: string) {
-    let newTasksState = tasks.filter(task => task.id !== id)
-    setTasks(newTasksState);
+    // let newTasksState = tasks.filter(task => task.id !== id)
+    // setTasks(newTasksState);
   }
+  // добавление тасок add
   function addTask(title: string) {
-    if (title.trim() === "") {
-      setError("Title is required")
-      return
-    }
-    let newTask: TaskType = { id: v1(), title: title.trim(), isDone: false }
-    setTasks([newTask, ...tasks])
+    // if (title.trim() === "") {
+    //   setError("Title is required")
+    //   return
+    // }
+    // let newTask: TaskType = { id: v1(), title: title.trim(), isDone: false }
+    // setTasks([newTask, ...tasks])
   }
-
+  // изменение статуса таски changeStatus
   function changeStatus(taskId: string, isDone: boolean) {
-    let task: TaskType | undefined = tasks.find(t => t.id === taskId);
-    if (task) { task.isDone = isDone }
-    setTasks([...tasks]);
+    // let task: TaskType | undefined = tasks.find(t => t.id === taskId);
+    // if (task) { task.isDone = isDone }
+    // setTasks([...tasks]);
 
   }
 
   return (
     <div className="App">
-      <Todolist
-        title={"what to lean"}
-        tasks={FilterNewArr}
-        error={error}
-        filter={filter}
-        removeTask={removeTask}
-        cahgeFilter={cahgeFilter}
-        addTask={addTask}
-        changeTaskStatus={changeStatus}
-        setError={setError}
-      />
-      {/*  {listArray.map(list => {
-        return (
-          <Todolist list={list} />
-        )
-      })} */}
+      {todolists.map((tl) => {
+        let NewFilterTasks = filterTasks(tasks[tl.id], tl.filter)
+        return <Todolist
+          key={tl.id}
+          id={tl.id}
+          title={tl.title}
+          tasks={NewFilterTasks}
+          error={error}
+          filter={tl.filter}
+          removeTask={removeTask}
+          cahgeFilter={cahgeFilter}
+          addTask={addTask}
+          changeTaskStatus={changeStatus}
+          setError={setError}
+        />
+      })}
     </div>
   )
 }
