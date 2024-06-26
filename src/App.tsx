@@ -27,7 +27,7 @@ type TasksType = {
 
 function App() {
 
-  // Data (исходные данные)
+  // ИСХОДНЫЕ ДАННЫЕ, ГЛОБАЛЬНЫЙ СТЕЙТ (Data)
   let todolistId_1 = v1();
   let todolistId_2 = v1();
 
@@ -51,58 +51,66 @@ function App() {
 
   const [error, setError] = useState<string | null>(null)
 
-  // logic (логика приложения)
-  // Фильтрация тасок filter
-  function filterTasks(allTask: Array<TaskType>, filter: FilterValueType) {
-    switch (filter) {
-      case "active":
-        return allTask.filter(task => task.isDone !== true)
-      case "completed":
-        return allTask.filter(task => task.isDone !== false)
-      default:
-        return allTask
-    }
+  // ЛОГИКА!! CRUD-операции (logic)
+
+  // Операции с тудулистами (Todolist-CRUD)
+  // добавление нового тудулиста (addTodolist)
+  function addTodolist(title: string) {
   }
+  // удаление тудулиста (removeTodolist)
+  function removeTodolist(todolistId: string) {
+    setTodolists(todolists.filter(todolist => todolist.id !== todolistId));
+    delete tasks[todolistId];
+    setTasks(tasks)
+  }
+  // Операции с тасками (Tasks-CRUD)
+  // пуш отфильтрованного массива тасок в стейт
   const cahgeFilter = (todolistId: string, filter: FilterValueType) => {
     setTodolists(todolists.map(el => el.id === todolistId ? { ...el, filter } : el))
   }
-  // Удаление тасок remove
-  function removeTask(id: string) {
-    // let newTasksState = tasks.filter(task => task.id !== id)
-    // setTasks(newTasksState);
+  // Удаление тасок (removeTask)
+  function removeTask(todolistId: string, id: string) {
+    setTasks({ ...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== id) });
   }
-  // добавление тасок add
-  function addTask(title: string) {
+  // добавление тасок (addTask)
+  function addTask(todolistId: string, title: string) {
     // if (title.trim() === "") {
     //   setError("Title is required")
     //   return
     // }
-    // let newTask: TaskType = { id: v1(), title: title.trim(), isDone: false }
-    // setTasks([newTask, ...tasks])
+    let newTask: TaskType = { id: v1(), title: title.trim(), isDone: false }
+    setTasks({ ...tasks, [todolistId]: [newTask, ...tasks[todolistId]] })
   }
   // изменение статуса таски changeStatus
-  function changeStatus(taskId: string, isDone: boolean) {
-    // let task: TaskType | undefined = tasks.find(t => t.id === taskId);
-    // if (task) { task.isDone = isDone }
-    // setTasks([...tasks]);
-
+  function changeStatus(todolistId: string, taskId: string, isDone: boolean) {
+    setTasks({ ...tasks, [todolistId]: tasks[todolistId].map(task => task.id === taskId ? { ...task, isDone } : task) })
   }
 
   return (
     <div className="App">
+      <div>
+        <input
+        // value={newTodolistTitle}
+        // onChange={onChangeHandler}
+        // onKeyPress={onKeyPressHandler}
+        // className={error ? "error" : ""}
+        />
+        <button>+</button>
+        {error && <div className="error-message">Field is required</div>}
+      </div>
       {todolists.map((tl) => {
-        let NewFilterTasks = filterTasks(tasks[tl.id], tl.filter)
         return <Todolist
           key={tl.id}
           id={tl.id}
           title={tl.title}
-          tasks={NewFilterTasks}
+          tasks={tasks[tl.id]}
           error={error}
           filter={tl.filter}
           removeTask={removeTask}
           cahgeFilter={cahgeFilter}
           addTask={addTask}
           changeTaskStatus={changeStatus}
+          removeTodolist={removeTodolist}
           setError={setError}
         />
       })}
