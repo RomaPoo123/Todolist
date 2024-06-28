@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState, KeyboardEvent } from "react"
 import { TaskType, FilterValueType } from "../../App"
+import { AddItemForm } from "../addItemForm/AddItemForm"
 
 
 type TodolistPropsType = {
@@ -41,24 +42,9 @@ export const Todolist = ({ id, title, tasks, error, filter, removeTask, cahgeFil
     const removeTaskHandler = (taskId: string) => {
         removeTask(id, taskId)
     }
-
-    // Функции-обертки для функции добавления таски (addTaskHandler
-    //добавления в стейт название таски из инпута (onChangeHandler) 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(e.currentTarget.value)
-    }
-    // добавление таски в список тудулиста с помощью pressKey (onKeyPressHandler)
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
-
-        if (e.charCode === 13) {
-            addTask(id, newTaskTitle);
-            setNewTaskTitle("")
-        }
-    }
     // добавление таски в список тудулиста с по клику кнопки (onClickHandler)
-    const onClickHandler = () => {
-        addTask(id, newTaskTitle);
+    const onClickHandler = (newItemTitle: string) => {
+        addTask(id, newItemTitle);
         setNewTaskTitle("")
     }
     // функция-обертка для функции изменения статуса таски (changeTaskStatusHandler)
@@ -70,7 +56,6 @@ export const Todolist = ({ id, title, tasks, error, filter, removeTask, cahgeFil
     const removeTodolistHandler = () => {
         removeTodolist(id)
     }
-
     const tasksList: JSX.Element = tasks.length === 0 ? <span>Yor taskslist is empty</span>
         : <ul>
             {NewFilterTasks.map(task => {
@@ -93,21 +78,12 @@ export const Todolist = ({ id, title, tasks, error, filter, removeTask, cahgeFil
     const onAllClickHandler = () => cahgeFilter(id, "all")
     const onActivelClickHandler = () => cahgeFilter(id, "active")
     const onCompletedClickHandler = () => cahgeFilter(id, "completed")
-    // UI
+    // отрисовка компоненты (UI)
     return (
         <div>
             <h3>{title}</h3>
             <button onClick={removeTodolistHandler}>x</button>
-            <div>
-                <input
-                    value={newTaskTitle}
-                    onChange={onChangeHandler}
-                    onKeyPress={onKeyPressHandler}
-                    className={error ? "error" : ""}
-                />
-                <button onClick={onClickHandler}>+</button>
-                {error && <div className="error-message">Field is required</div>}
-            </div>
+            <AddItemForm addItem={onClickHandler} />
             {tasksList}
             <div>
                 <button className={filter === "all" ? "active-filter" : ""} onClick={onAllClickHandler}>All</button>

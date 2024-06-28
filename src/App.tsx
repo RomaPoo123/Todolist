@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { Todolist } from './components/todolist/Todolist';
 import { v1 } from 'uuid';
+import { AddItemForm } from './components/addItemForm/AddItemForm';
 
 // Types
 export type FilterValueType = "all" | "active" | "completed"
@@ -48,7 +49,7 @@ function App() {
       { id: v1(), title: "Batman", isDone: false },
     ]
   })
-
+  console.log(tasks);
   const [error, setError] = useState<string | null>(null)
 
   // ЛОГИКА!! CRUD-операции (logic)
@@ -56,6 +57,10 @@ function App() {
   // Операции с тудулистами (Todolist-CRUD)
   // добавление нового тудулиста (addTodolist)
   function addTodolist(title: string) {
+    let todolistId = v1();
+    let newTodolist: TodolistType = { id: todolistId, title: title, filter: "all" }
+    setTodolists([newTodolist, ...todolists])
+    setTasks({ ...tasks, [todolistId]: [] })
   }
   // удаление тудулиста (removeTodolist)
   function removeTodolist(todolistId: string) {
@@ -88,16 +93,7 @@ function App() {
 
   return (
     <div className="App">
-      <div>
-        <input
-        // value={newTodolistTitle}
-        // onChange={onChangeHandler}
-        // onKeyPress={onKeyPressHandler}
-        // className={error ? "error" : ""}
-        />
-        <button>+</button>
-        {error && <div className="error-message">Field is required</div>}
-      </div>
+      <AddItemForm addItem={addTodolist} />
       {todolists.map((tl) => {
         return <Todolist
           key={tl.id}
