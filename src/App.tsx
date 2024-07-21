@@ -49,8 +49,7 @@ function App() {
       { id: v1(), title: "Batman", isDone: false },
     ]
   })
-  console.log(tasks);
-  const [error, setError] = useState<string | null>(null)
+
 
   // ЛОГИКА!! CRUD-операции (logic)
 
@@ -68,6 +67,11 @@ function App() {
     delete tasks[todolistId];
     setTasks(tasks)
   }
+  // Функция которая принимает измененный titleTodolist и заносит его в стейт
+  function changeNewTitleTodolist(todolistId: string, title: string) {
+    setTodolists(todolists.map(todolist => todolist.id === todolistId ? { ...todolist, title } : todolist))
+  }
+
   // Операции с тасками (Tasks-CRUD)
   // пуш отфильтрованного массива тасок в стейт
   const cahgeFilter = (todolistId: string, filter: FilterValueType) => {
@@ -79,10 +83,6 @@ function App() {
   }
   // добавление тасок (addTask)
   function addTask(todolistId: string, title: string) {
-    // if (title.trim() === "") {
-    //   setError("Title is required")
-    //   return
-    // }
     let newTask: TaskType = { id: v1(), title: title.trim(), isDone: false }
     setTasks({ ...tasks, [todolistId]: [newTask, ...tasks[todolistId]] })
   }
@@ -90,6 +90,11 @@ function App() {
   function changeStatus(todolistId: string, taskId: string, isDone: boolean) {
     setTasks({ ...tasks, [todolistId]: tasks[todolistId].map(task => task.id === taskId ? { ...task, isDone } : task) })
   }
+  // Функция которая принимает измененный titleTask и заносит его в стейт
+  function changeNewTaskTitle(todolistId: string, taskId: string, title: string) {
+    setTasks({ ...tasks, [todolistId]: tasks[todolistId].map(task => task.id === taskId ? { ...task, title } : task) })
+  }
+
 
   return (
     <div className="App">
@@ -100,14 +105,14 @@ function App() {
           id={tl.id}
           title={tl.title}
           tasks={tasks[tl.id]}
-          error={error}
           filter={tl.filter}
           removeTask={removeTask}
           cahgeFilter={cahgeFilter}
           addTask={addTask}
           changeTaskStatus={changeStatus}
           removeTodolist={removeTodolist}
-          setError={setError}
+          changeNewTaskTitle={changeNewTaskTitle}
+          changeNewTitleTodolist={changeNewTitleTodolist}
         />
       })}
     </div>

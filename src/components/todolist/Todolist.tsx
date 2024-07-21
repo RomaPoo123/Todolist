@@ -1,32 +1,35 @@
 import React, { ChangeEvent, useState, KeyboardEvent } from "react"
 import { TaskType, FilterValueType } from "../../App"
 import { AddItemForm } from "../addItemForm/AddItemForm"
-
+import { EditableSpan } from "../editableSpan/EditableSpan"
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Button } from "@mui/material";
 
 type TodolistPropsType = {
     id: string
     title: string
     tasks: Array<TaskType>
-    error: string | null
     filter: FilterValueType
+
     removeTask: (todolistId: string, id: string) => void
     cahgeFilter: (todolistId: string, filter: FilterValueType) => void
     addTask: (todolistId: string, title: string) => void
     changeTaskStatus: (todolist: string, taskId: string, isDone: boolean) => void
     removeTodolist: (todolist: string) => void
-    setError: (error: string | null) => void
-
+    changeNewTaskTitle: (todolistId: string, taskId: string, newTitle: string) => void
+    changeNewTitleTodolist: (id: string, newTitle: string) => void
 }
 
 
-export const Todolist = ({ id, title, tasks, error, filter, removeTask, cahgeFilter, addTask, changeTaskStatus, removeTodolist, setError }: TodolistPropsType) => {
+export const Todolist = ({ id, title, tasks, filter, removeTask, cahgeFilter, addTask, changeTaskStatus, removeTodolist, changeNewTaskTitle, changeNewTitleTodolist }: TodolistPropsType) => {
     // Локальный стейт компоненты
-    const [newTaskTitle, setNewTaskTitle] = useState<string>("")
+
     // ЛОГИКА!! (logic) 
 
     // фильтрация тасок (filter)
     let NewFilterTasks = filterTasks(tasks, filter)
-    function filterTasks(allTask: Array<TaskType>, filter: FilterValueType) {
+    function filterTasks(allTask: TaskType[], filter: FilterValueType) {
         switch (filter) {
             case "active":
                 return allTask.filter(task => task.isDone !== true)
@@ -43,9 +46,8 @@ export const Todolist = ({ id, title, tasks, error, filter, removeTask, cahgeFil
         removeTask(id, taskId)
     }
     // добавление таски в список тудулиста с по клику кнопки (onClickHandler)
-    const onClickHandler = (newItemTitle: string) => {
+    const addTaskHandler = (newItemTitle: string) => {
         addTask(id, newItemTitle);
-        setNewTaskTitle("")
     }
     // функция-обертка для функции изменения статуса таски (changeTaskStatusHandler)
     const changeTaskStatusHandler = (taskId: string, isDone: boolean) => {
@@ -56,19 +58,30 @@ export const Todolist = ({ id, title, tasks, error, filter, removeTask, cahgeFil
     const removeTodolistHandler = () => {
         removeTodolist(id)
     }
+    // Функции-обертки для передачи нового NewTitleTodolist в компоненту App (changeNewTitleTodolist)
+    const changeNewTitleTodolistHandler = (newTitle: string) => {
+        changeNewTitleTodolist(id, newTitle)
+    }
+
     const tasksList: JSX.Element = tasks.length === 0 ? <span>Yor taskslist is empty</span>
         : <ul>
             {NewFilterTasks.map(task => {
-                const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => { changeTaskStatusHandler(task.id, e.currentTarget.checked) }
+                const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => { changeTaskStatusHandler(task.id, e.currentTarget.checked) }
+                const onChangeTitleHandler = (newTitle: string) => {
+                    changeNewTaskTitle(id, task.id, newTitle)
+                }
                 return (
                     <li key={task.id} className={task.isDone ? "is-Done" : ""}>
                         <input
                             type="checkbox"
                             checked={task.isDone}
-                            onChange={onChangeHandler}
+                            onChange={onChangeStatusHandler}
                         />
-                        <span>{task.title}</span>
+                        <EditableSpan title={task.title} onChange={onChangeTitleHandler} />
                         <button onClick={() => removeTaskHandler(task.id)}>x</button>
+                        <IconButton aria-label="delete" size="small" onClick={() => removeTaskHandler(task.id)} >
+                            <DeleteIcon />
+                        </IconButton>
                     </li>
                 )
             }
@@ -81,14 +94,17 @@ export const Todolist = ({ id, title, tasks, error, filter, removeTask, cahgeFil
     // отрисовка компоненты (UI)
     return (
         <div>
-            <h3>{title}</h3>
-            <button onClick={removeTodolistHandler}>x</button>
-            <AddItemForm addItem={onClickHandler} />
+            <h3><EditableSpan title={title} onChange={changeNewTitleTodolistHandler} /></h3>
+            {/* <button onClick={removeTodolistHandler}>x</button> */}
+            <IconButton aria-label="delete" onClick={removeTodolistHandler} >
+                <DeleteIcon />
+            </IconButton>
+            <AddItemForm addItem={addTaskHandler} />
             {tasksList}
             <div>
-                <button className={filter === "all" ? "active-filter" : ""} onClick={onAllClickHandler}>All</button>
-                <button className={filter === "active" ? "active-filter" : ""} onClick={onActivelClickHandler}>Active</button>
-                <button className={filter === "completed" ? "active-filter" : ""} onClick={onCompletedClickHandler}>Completed</button>
+                <Button variant={filter === "all" ? "contained" : "outlined"} onClick={onAllClickHandler}>All</Button>
+                <Button variant={filter === "active" ? "contained" : "outlined"} onClick={onActivelClickHandler}>Active</Button>
+                <Button variant={filter === "completed" ? "contained" : "outlined"} onClick={onCompletedClickHandler}>Completed</Button>
             </div>
         </div>
     )
