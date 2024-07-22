@@ -1,6 +1,9 @@
 import React from "react"
 import { ChangeEvent, useState, KeyboardEvent } from "react"
-import { Button, TextField } from "@mui/material"
+import { TextField } from "@mui/material"
+import IconButton from '@mui/material/IconButton';
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
+
 
 
 type AddItemFormType = {
@@ -49,7 +52,9 @@ export const AddItemForm = ({ addItem }: AddItemFormType) => {
                 error={!!error}
                 helperText={error}
             />
-            <Button onClick={onClickHandler} variant="contained" size="small">+</Button>
+            <IconButton onClick={onClickHandler} size="medium">
+                <ControlPointIcon />
+            </IconButton>
             {/* {error && <div className="error-message">{error}</div>} */}
         </div>
     )

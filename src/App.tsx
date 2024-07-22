@@ -3,7 +3,8 @@ import './App.css';
 import { Todolist } from './components/todolist/Todolist';
 import { v1 } from 'uuid';
 import { AddItemForm } from './components/addItemForm/AddItemForm';
-
+import { Header } from './components/header/Header'
+import { Container, Grid, Paper } from '@mui/material';
 // Types
 export type FilterValueType = "all" | "active" | "completed"
 
@@ -98,23 +99,34 @@ function App() {
 
   return (
     <div className="App">
-      <AddItemForm addItem={addTodolist} />
-      {todolists.map((tl) => {
-        return <Todolist
-          key={tl.id}
-          id={tl.id}
-          title={tl.title}
-          tasks={tasks[tl.id]}
-          filter={tl.filter}
-          removeTask={removeTask}
-          cahgeFilter={cahgeFilter}
-          addTask={addTask}
-          changeTaskStatus={changeStatus}
-          removeTodolist={removeTodolist}
-          changeNewTaskTitle={changeNewTaskTitle}
-          changeNewTitleTodolist={changeNewTitleTodolist}
-        />
-      })}
+      <Header />
+      <Container fixed>
+        <Grid container style={{ padding: "10px" }}>
+          <AddItemForm addItem={addTodolist} />
+        </Grid>
+        <Grid container spacing={10}>
+          {todolists.map((tl) => {
+            return <Grid item>
+              <Paper elevation={3} style={{ padding: "30px" }}>
+                <Todolist
+                  key={tl.id}
+                  id={tl.id}
+                  title={tl.title}
+                  tasks={tasks[tl.id]}
+                  filter={tl.filter}
+                  removeTask={removeTask}
+                  cahgeFilter={cahgeFilter}
+                  addTask={addTask}
+                  changeTaskStatus={changeStatus}
+                  removeTodolist={removeTodolist}
+                  changeNewTaskTitle={changeNewTaskTitle}
+                  changeNewTitleTodolist={changeNewTitleTodolist}
+                />
+              </Paper>
+            </Grid>
+          })}
+        </Grid>
+      </Container>
     </div>
   )
 }

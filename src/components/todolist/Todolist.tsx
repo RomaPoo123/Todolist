@@ -5,6 +5,7 @@ import { EditableSpan } from "../editableSpan/EditableSpan"
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button } from "@mui/material";
+import Checkbox from '@mui/material/Checkbox';
 
 type TodolistPropsType = {
     id: string
@@ -64,7 +65,7 @@ export const Todolist = ({ id, title, tasks, filter, removeTask, cahgeFilter, ad
     }
 
     const tasksList: JSX.Element = tasks.length === 0 ? <span>Yor taskslist is empty</span>
-        : <ul>
+        : <div>
             {NewFilterTasks.map(task => {
                 const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => { changeTaskStatusHandler(task.id, e.currentTarget.checked) }
                 const onChangeTitleHandler = (newTitle: string) => {
@@ -72,11 +73,8 @@ export const Todolist = ({ id, title, tasks, filter, removeTask, cahgeFilter, ad
                 }
                 return (
                     <li key={task.id} className={task.isDone ? "is-Done" : ""}>
-                        <input
-                            type="checkbox"
-                            checked={task.isDone}
-                            onChange={onChangeStatusHandler}
-                        />
+                        <Checkbox checked={task.isDone}
+                            onChange={onChangeStatusHandler} />
                         <EditableSpan title={task.title} onChange={onChangeTitleHandler} />
                         <button onClick={() => removeTaskHandler(task.id)}>x</button>
                         <IconButton aria-label="delete" size="small" onClick={() => removeTaskHandler(task.id)} >
@@ -86,7 +84,7 @@ export const Todolist = ({ id, title, tasks, filter, removeTask, cahgeFilter, ad
                 )
             }
             )}
-        </ul >
+        </div >
     // создание функции-обертки для фильтрации (FilterHandlers)
     const onAllClickHandler = () => cahgeFilter(id, "all")
     const onActivelClickHandler = () => cahgeFilter(id, "active")
