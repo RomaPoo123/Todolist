@@ -1,4 +1,3 @@
-import { TaskType } from "../App";
 import { TasksType } from "../App";
 import { v1 } from "uuid";
 
@@ -25,8 +24,7 @@ export const tasksReducer = (state: TasksType, action: TasksReducerActionType): 
         case "CHANGE-STATUS-TASK":
             return { ...state, [action.todolistId]: state[action.todolistId].map((task) => task.id === action.taskId ? { ...task, isDone: action.isDone } : task) }
         case "ADD-TODOLIST":
-            return { ...state, [action.todolistId]: [] }
-
+            return { [action.todolistId]: [], ...state }
         case "REMOVE-TODOLIST":
             const { [action.todolistId]: [], ...newState } = state
             return newState
@@ -34,7 +32,6 @@ export const tasksReducer = (state: TasksType, action: TasksReducerActionType): 
             return state
     }
 }
-
 export const removeTaskAC = (todolistId: string, taskId: string) => {
     return { type: "REMOVE-TASK", todolistId, taskId } as const
 }

@@ -2,7 +2,7 @@ import { TaskType } from "../App";
 import { TasksType } from "../App";
 import { v1 } from "uuid";
 import { addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC, tasksReducer } from "./tasks-reducer";
-import { AddTodolistAC, RemoveTodolistAC } from "./todolists-reducer";
+import { addTodolistAC, removeTodolistAC } from "./todolists-reducer";
 
 let startState: TasksType
 
@@ -81,7 +81,7 @@ test("new array should be added when new todolist is added", () => {
     // start Data
     let newKey = v1();
 
-    const action = AddTodolistAC("Привет")
+    const action = addTodolistAC("Привет")
 
     // change Data 
     const endState: TasksType = tasksReducer(startState, action)
@@ -92,7 +92,7 @@ test("new array should be added when new todolist is added", () => {
 })
 test("property with todolistId should be deleted", () => {
 
-    const action = RemoveTodolistAC("todolistId1")
+    const action = removeTodolistAC("todolistId1")
 
     // change Data 
     const endState: TasksType = tasksReducer(startState, action)

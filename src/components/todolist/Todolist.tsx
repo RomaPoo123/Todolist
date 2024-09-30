@@ -76,7 +76,6 @@ export const Todolist = ({ id, title, tasks, filter, removeTask, cahgeFilter, ad
                         <Checkbox checked={task.isDone}
                             onChange={onChangeStatusHandler} />
                         <EditableSpan title={task.title} onChange={onChangeTitleHandler} />
-                        <button onClick={() => removeTaskHandler(task.id)}>x</button>
                         <IconButton aria-label="delete" size="small" onClick={() => removeTaskHandler(task.id)} >
                             <DeleteIcon />
                         </IconButton>
