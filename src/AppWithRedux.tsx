@@ -5,8 +5,11 @@ import { v1 } from 'uuid';
 import { AddItemForm } from './components/addItemForm/AddItemForm';
 import { Header } from './components/header/Header'
 import { Container, Grid, Paper } from '@mui/material';
-import { addTodolistAC, changeFilterTodolistAC, changeTitleTodolistAC, removeTodolistAC, todolistReducer } from './state/todolists-reducer';
-import { addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC, tasksReducer } from './state/tasks-reducer';
+import { addTodolistAC, changeFilterTodolistAC, changeTitleTodolistAC, removeTodolistAC } from './state/todolists-reducer';
+import { addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC } from './state/tasks-reducer';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { AppRootState } from './state/store';
 
 // Types
 export type FilterValueType = "all" | "active" | "completed"
@@ -30,34 +33,13 @@ export type TasksType = {
 
 
 
-function AppWithRedux() {
+function AppWithReducers() {
 
   // ИСХОДНЫЕ ДАННЫЕ, ГЛОБАЛЬНЫЙ СТЕЙТ (Data)
-  let todolistId_1 = v1();
-  let todolistId_2 = v1();
 
-
-
-  let [todolists, dispatchToTodolistsReducer] = useReducer(todolistReducer, [
-    { id: todolistId_1, title: "what to lean", filter: "all" },
-    { id: todolistId_2, title: "what to see", filter: "all" },
-  ])
-
-
-
-  let [tasks, dispatchToTasksReducer] = useReducer(tasksReducer, {
-    [todolistId_1]: [
-      { id: v1(), title: "CSS&HTML", isDone: true },
-      { id: v1(), title: "JavaScript", isDone: true },
-      { id: v1(), title: "React", isDone: false },
-    ],
-    [todolistId_2]: [
-      { id: v1(), title: "Game of Thrones", isDone: true },
-      { id: v1(), title: "Spider-man", isDone: true },
-      { id: v1(), title: "Batman", isDone: false },
-    ]
-  })
-
+  const dispatch = useDispatch();
+  const todolists = useSelector<AppRootState, TodolistType[]>(state => state.todolists)
+  const tasks = useSelector<AppRootState, TasksType>(state => state.tasks)
 
   // ЛОГИКА!! CRUD-операции (logic)
 
@@ -65,39 +47,39 @@ function AppWithRedux() {
   // добавление нового тудулиста (addTodolist)
   function addTodolist(title: string) {
     let action = addTodolistAC(title);
-    dispatchToTodolistsReducer(action);
-    dispatchToTasksReducer(action)
+    dispatch(action);
+
   }
   // удаление тудулиста (removeTodolist)
   function removeTodolist(todolistId: string) {
-    dispatchToTodolistsReducer(removeTodolistAC(todolistId))
-    dispatchToTasksReducer(removeTodolistAC(todolistId))
+    dispatch(removeTodolistAC(todolistId))
+
   }
   // Функция которая принимает измененный titleTodolist и заносит его в стейт
   function changeNewTitleTodolist(todolistId: string, title: string) {
-    dispatchToTodolistsReducer(changeTitleTodolistAC(todolistId, title))
+    dispatch(changeTitleTodolistAC(todolistId, title))
   }
 
   // Операции с тасками (Tasks-CRUD)
   // пуш отфильтрованного массива тасок в стейт
   const cahgeFilter = (todolistId: string, filter: FilterValueType) => {
-    dispatchToTodolistsReducer(changeFilterTodolistAC(todolistId, filter,))
+    dispatch(changeFilterTodolistAC(todolistId, filter,))
   }
   // Удаление тасок (removeTask)
   function removeTask(todolistId: string, id: string) {
-    dispatchToTasksReducer(removeTaskAC(todolistId, id))
+    dispatch(removeTaskAC(todolistId, id))
   }
   // добавление тасок (addTask)
   function addTask(todolistId: string, title: string) {
-    dispatchToTasksReducer(addTaskAC(todolistId, title))
+    dispatch(addTaskAC(todolistId, title))
   }
   // изменение статуса таски changeStatus
   function changeStatus(todolistId: string, taskId: string, isDone: boolean) {
-    dispatchToTasksReducer(changeStatusTaskAC(todolistId, taskId, isDone))
+    dispatch(changeStatusTaskAC(todolistId, taskId, isDone))
   }
   // Функция которая принимает измененный titleTask и заносит его в стейт
   function changeNewTaskTitle(todolistId: string, taskId: string, title: string) {
-    dispatchToTasksReducer(changeTitleTaskAC(todolistId, taskId, title))
+    dispatch(changeTitleTaskAC(todolistId, taskId, title))
   }
 
 
@@ -135,4 +117,4 @@ function AppWithRedux() {
   )
 }
 
-export default AppWithRedux;
+export default AppWithReducers;
