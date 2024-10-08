@@ -10,7 +10,8 @@ type AddItemFormType = {
     addItem: (title: string) => void
 }
 
-export const AddItemForm = ({ addItem }: AddItemFormType) => {
+export const AddItemForm = React.memo(({ addItem }: AddItemFormType) => {
+    console.log("AddItemForm is called")
     const [newItemTitle, setNewItemTitle] = useState("")
     const [error, setError] = useState<string | null>(null)
 
@@ -34,7 +35,9 @@ export const AddItemForm = ({ addItem }: AddItemFormType) => {
     }
     // добавление таски в список тудулиста с помощью pressKey (onKeyPressHandler)
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+        if (error !== null) {
+            setError(null);
+        }
         if (e.charCode === 13) {
             onClickHandler()
             setNewItemTitle("")
@@ -58,4 +61,4 @@ export const AddItemForm = ({ addItem }: AddItemFormType) => {
             {/* {error && <div className="error-message">{error}</div>} */}
         </div>
     )
-}
+})

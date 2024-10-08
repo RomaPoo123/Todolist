@@ -1,3 +1,4 @@
+import React from "react"
 import { TextField } from "@mui/material"
 import { ChangeEvent, useState } from "react"
 
@@ -7,7 +8,8 @@ type EditableSpanPropsTape = {
     onChange: (newTitle: string) => void
 }
 
-export function EditableSpan({ title, onChange }: EditableSpanPropsTape) {
+export const EditableSpan = React.memo(({ title, onChange }: EditableSpanPropsTape) => {
+    console.log("EditableSpan is called")
     // локальный стейт для управления компонентой
     let [editMode, setEditMode] = useState<boolean>(false)
     let [newTitle, setNewTitle] = useState<string>("")
@@ -31,4 +33,4 @@ export function EditableSpan({ title, onChange }: EditableSpanPropsTape) {
         editMode ? <TextField variant="standard" value={newTitle} onChange={onChangeHandler} onBlur={activateViewMode} autoFocus /> :
             <span onDoubleClick={activateEditMode}>{title}</span>
     )
-}
+})

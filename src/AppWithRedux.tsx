@@ -1,41 +1,34 @@
-import React, { useReducer, useState } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
 import './App.css';
 import { Todolist } from './components/todolist/Todolist';
-import { v1 } from 'uuid';
 import { AddItemForm } from './components/addItemForm/AddItemForm';
 import { Header } from './components/header/Header'
 import { Container, Grid, Paper } from '@mui/material';
 import { addTodolistAC, changeFilterTodolistAC, changeTitleTodolistAC, removeTodolistAC } from './state/todolists-reducer';
-import { addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC } from './state/tasks-reducer';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { AppRootState } from './state/store';
 
 // Types
 export type FilterValueType = "all" | "active" | "completed"
-
 export type TaskType = {
   id: string
   title: string
   isDone: boolean
 }
-
 export type TodolistType = {
   id: string
   title: string
   filter: FilterValueType
 }
-
 export type TasksType = {
   [todolistId: string]: TaskType[]
 }
 
+const AppWithRedux = React.memo(() => {
+  console.log("App is called")
 
-
-
-function AppWithReducers() {
-
-  // ИСХОДНЫЕ ДАННЫЕ, ГЛОБАЛЬНЫЙ СТЕЙТ (Data)
+  // ИСХОДНЫЕ ДАННЫЕ (Data)
 
   const dispatch = useDispatch();
   const todolists = useSelector<AppRootState, TodolistType[]>(state => state.todolists)
@@ -45,43 +38,20 @@ function AppWithReducers() {
 
   // Операции с тудулистами (Todolist-CRUD)
   // добавление нового тудулиста (addTodolist)
-  function addTodolist(title: string) {
+  const addTodolist = useCallback((title: string) => {
     let action = addTodolistAC(title);
     dispatch(action);
 
-  }
+  }, [dispatch])
   // удаление тудулиста (removeTodolist)
-  function removeTodolist(todolistId: string) {
+  const removeTodolist = useCallback((todolistId: string) => {
     dispatch(removeTodolistAC(todolistId))
 
-  }
+  }, [dispatch])
   // Функция которая принимает измененный titleTodolist и заносит его в стейт
-  function changeNewTitleTodolist(todolistId: string, title: string) {
+  const changeNewTitleTodolist = useCallback((todolistId: string, title: string) => {
     dispatch(changeTitleTodolistAC(todolistId, title))
-  }
-
-  // Операции с тасками (Tasks-CRUD)
-  // пуш отфильтрованного массива тасок в стейт
-  const cahgeFilter = (todolistId: string, filter: FilterValueType) => {
-    dispatch(changeFilterTodolistAC(todolistId, filter,))
-  }
-  // Удаление тасок (removeTask)
-  function removeTask(todolistId: string, id: string) {
-    dispatch(removeTaskAC(todolistId, id))
-  }
-  // добавление тасок (addTask)
-  function addTask(todolistId: string, title: string) {
-    dispatch(addTaskAC(todolistId, title))
-  }
-  // изменение статуса таски changeStatus
-  function changeStatus(todolistId: string, taskId: string, isDone: boolean) {
-    dispatch(changeStatusTaskAC(todolistId, taskId, isDone))
-  }
-  // Функция которая принимает измененный titleTask и заносит его в стейт
-  function changeNewTaskTitle(todolistId: string, taskId: string, title: string) {
-    dispatch(changeTitleTaskAC(todolistId, taskId, title))
-  }
-
+  }, [dispatch])
 
   return (
     <div className="App">
@@ -92,7 +62,7 @@ function AppWithReducers() {
         </Grid>
         <Grid container spacing={10}>
           {todolists.map((tl) => {
-            return <Grid item>
+            return <Grid item key={tl.id}>
               <Paper elevation={3} style={{ padding: "30px" }}>
                 <Todolist
                   key={tl.id}
@@ -100,12 +70,7 @@ function AppWithReducers() {
                   title={tl.title}
                   tasks={tasks[tl.id]}
                   filter={tl.filter}
-                  removeTask={removeTask}
-                  cahgeFilter={cahgeFilter}
-                  addTask={addTask}
-                  changeTaskStatus={changeStatus}
                   removeTodolist={removeTodolist}
-                  changeNewTaskTitle={changeNewTaskTitle}
                   changeNewTitleTodolist={changeNewTitleTodolist}
                 />
               </Paper>
@@ -115,6 +80,6 @@ function AppWithReducers() {
       </Container>
     </div>
   )
-}
+})
 
-export default AppWithReducers;
+export default AppWithRedux;

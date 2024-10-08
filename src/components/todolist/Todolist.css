@@ -1,0 +1,22 @@
+.headerTodolist {
+    display: flex;
+    justify-content: space-between;
+};
+.trueTask {
+    size: 30px;
+}
+
+.BtnsPanel {
+    display: flex;
+    justify-content: space-between;
+}
+.tasksList {
+    margin: 0px;
+    padding: 0px;
+}
+.tasksList li {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    max-width: 210px;
+}

@@ -112,7 +112,7 @@ function AppWithRedux() {
           {todolists.map((tl) => {
             return <Grid item>
               <Paper elevation={3} style={{ padding: "30px" }}>
-                <Todolist
+                {/* <Todolist
                   key={tl.id}
                   id={tl.id}
                   title={tl.title}
@@ -125,7 +125,7 @@ function AppWithRedux() {
                   removeTodolist={removeTodolist}
                   changeNewTaskTitle={changeNewTaskTitle}
                   changeNewTitleTodolist={changeNewTitleTodolist}
-                />
+                /> */}
               </Paper>
             </Grid>
           })}
