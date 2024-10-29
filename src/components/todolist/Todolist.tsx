@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { ChangeEvent, useCallback } from "react"
 import "./Todolist.css"
 import { TaskType, FilterValueType } from "../../AppWithRedux"
 import { AddItemForm } from "../addItemForm/AddItemForm"
@@ -9,8 +9,8 @@ import { Button } from "@mui/material";
 import Checkbox from '@mui/material/Checkbox';
 import { useDispatch } from "react-redux";
 import { changeFilterTodolistAC } from "../../state/todolists-reducer";
-import { addTaskAC } from "../../state/tasks-reducer";
-import { Task } from "../task/Task"
+import { addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC } from "../../state/tasks-reducer";
+
 
 type TodolistPropsType = {
     id: string
@@ -44,13 +44,17 @@ export const Todolist = React.memo(({ id, title, tasks, filter, removeTodolist, 
         dispatch(addTaskAC(id, newItemTitle))
     }, [dispatch, id])
     // Функция-обертка для функции удаления тасок (removeTaskHandler)
-    /*     const removeTaskHandler = (taskId: string) => {
-            dispatch(removeTaskAC(id, taskId))
-        } */
+    const removeTaskHandler = useCallback((taskId: string) => {
+        dispatch(removeTaskAC(id, taskId))
+    }, [dispatch, id])
     // функция-обертка для функции изменения статуса таски (changeTaskStatusHandler)
-    /*     const changeTaskStatusHandler = (taskId: string, isDone: boolean) => {
-            dispatch(changeStatusTaskAC(id, taskId, isDone))
-        } */
+    const changeTaskStatusHandler = (taskId: string, isDone: boolean) => {
+        dispatch(changeStatusTaskAC(id, taskId, isDone))
+    }
+    // Функция-обертка для функции изменения title таски (onChangeTitleHandler)
+    const сhangeTitleHandler = (taskId: string, newTitle: string) => {
+        dispatch(changeTitleTaskAC(id, taskId, newTitle))
+    }
 
     // фильтрация тасок (filter)
     function filterTasks(allTask: TaskType[], filter: FilterValueType) {
@@ -76,24 +80,23 @@ export const Todolist = React.memo(({ id, title, tasks, filter, removeTodolist, 
 
     const tasksList: JSX.Element = tasks.length === 0 ? <span>Yor taskslist is empty</span>
         : <div>
-            {NewFilterTasks.map(task => <Task key={task.id} todolistId={id} task={task} />
-                /* {
-                    const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => { changeTaskStatusHandler(task.id, e.currentTarget.checked) }
-                    const onChangeTitleHandler = (newTitle: string) => {
-                        dispatch(changeTitleTaskAC(id, task.id, newTitle))
-                    }
-                    return (
-                        <li key={task.id} className={task.isDone ? "trueTask" : ""}>
-                            <Checkbox checked={task.isDone}
-                                onChange={onChangeStatusHandler} />
-                            <EditableSpan title={task.title} onChange={onChangeTitleHandler} />
-                            <IconButton aria-label="delete" size="small" onClick={() => removeTaskHandler(task.id)} >
-                                <DeleteIcon />
-                            </IconButton>
-                        </li>
-                    )
-                } */
-            )}
+            {/* Заменить на отдельную компоненту */}
+            {NewFilterTasks.map(task => {
+                const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => { changeTaskStatusHandler(task.id, e.currentTarget.checked) }
+                const onChangeTitleHandler = (newTitle: string) => {
+                    dispatch(changeTitleTaskAC(id, task.id, newTitle))
+                }
+                return (
+                    <li key={task.id} className={task.isDone ? "trueTask" : ""}>
+                        <Checkbox checked={task.isDone}
+                            onChange={onChangeStatusHandler} />
+                        <EditableSpan title={task.title} onChange={onChangeTitleHandler} />
+                        <IconButton aria-label="delete" size="small" onClick={() => removeTaskHandler(task.id)} >
+                            <DeleteIcon />
+                        </IconButton>
+                    </li>
+                )
+            })}
         </div >
     // отрисовка компоненты (UI)
     return (

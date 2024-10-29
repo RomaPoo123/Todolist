@@ -7,7 +7,7 @@ import { Container, Grid, Paper } from '@mui/material';
 import { addTodolistAC, changeFilterTodolistAC, changeTitleTodolistAC, removeTodolistAC } from './state/todolists-reducer';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { AppRootState } from './state/store';
+import { AppRootStateType } from './state/store';
 
 // Types
 export type FilterValueType = "all" | "active" | "completed"
@@ -31,8 +31,8 @@ const AppWithRedux = React.memo(() => {
   // ИСХОДНЫЕ ДАННЫЕ (Data)
 
   const dispatch = useDispatch();
-  const todolists = useSelector<AppRootState, TodolistType[]>(state => state.todolists)
-  const tasks = useSelector<AppRootState, TasksType>(state => state.tasks)
+  const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
+  const tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
 
   // ЛОГИКА!! CRUD-операции (logic)
 
