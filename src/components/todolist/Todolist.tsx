@@ -6,10 +6,11 @@ import { EditableSpan } from "../editableSpan/EditableSpan"
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button } from "@mui/material";
-import Checkbox from '@mui/material/Checkbox';
 import { useDispatch } from "react-redux";
 import { changeFilterTodolistAC } from "../../state/todolists-reducer";
 import { addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC } from "../../state/tasks-reducer";
+import { Task } from "../task/Task"
+
 
 
 type TodolistPropsType = {
@@ -42,19 +43,19 @@ export const Todolist = React.memo(({ id, title, tasks, filter, removeTodolist, 
     // добавление таски в список тудулиста с по клику кнопки (onClickHandler)
     const addTaskHandler = useCallback((newItemTitle: string) => {
         dispatch(addTaskAC(id, newItemTitle))
-    }, [dispatch, id])
+    }, [dispatch, id]);
     // Функция-обертка для функции удаления тасок (removeTaskHandler)
     const removeTaskHandler = useCallback((taskId: string) => {
         dispatch(removeTaskAC(id, taskId))
-    }, [dispatch, id])
+    }, [dispatch, id]);
     // функция-обертка для функции изменения статуса таски (changeTaskStatusHandler)
-    const changeTaskStatusHandler = (taskId: string, isDone: boolean) => {
+    const changeTaskStatusHandler = useCallback((taskId: string, isDone: boolean) => {
         dispatch(changeStatusTaskAC(id, taskId, isDone))
-    }
+    }, [dispatch, id]);
     // Функция-обертка для функции изменения title таски (onChangeTitleHandler)
-    const сhangeTitleHandler = (taskId: string, newTitle: string) => {
+    const сhangeTitleHandler = useCallback((taskId: string, newTitle: string) => {
         dispatch(changeTitleTaskAC(id, taskId, newTitle))
-    }
+    }, [dispatch, id]);
 
     // фильтрация тасок (filter)
     function filterTasks(allTask: TaskType[], filter: FilterValueType) {
@@ -80,24 +81,11 @@ export const Todolist = React.memo(({ id, title, tasks, filter, removeTodolist, 
 
     const tasksList: JSX.Element = tasks.length === 0 ? <span>Yor taskslist is empty</span>
         : <div>
-            {/* Заменить на отдельную компоненту */}
-            {NewFilterTasks.map(task => {
-                const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => { changeTaskStatusHandler(task.id, e.currentTarget.checked) }
-                const onChangeTitleHandler = (newTitle: string) => {
-                    dispatch(changeTitleTaskAC(id, task.id, newTitle))
-                }
-                return (
-                    <li key={task.id} className={task.isDone ? "trueTask" : ""}>
-                        <Checkbox checked={task.isDone}
-                            onChange={onChangeStatusHandler} />
-                        <EditableSpan title={task.title} onChange={onChangeTitleHandler} />
-                        <IconButton aria-label="delete" size="small" onClick={() => removeTaskHandler(task.id)} >
-                            <DeleteIcon />
-                        </IconButton>
-                    </li>
-                )
-            })}
+            {NewFilterTasks.map(task => <Task key={task.id} task={task} removeTask={removeTaskHandler} changeTaskStatus={changeTaskStatusHandler} changeTaskTitle={сhangeTitleHandler} />
+            )}
         </div >
+
+
     // отрисовка компоненты (UI)
     return (
         <div>
