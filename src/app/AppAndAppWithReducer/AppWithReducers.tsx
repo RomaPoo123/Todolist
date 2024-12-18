@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import './App.css';
-import { Todolist } from './components/todolist/Todolist';
+import React, { useReducer, useState } from 'react';
+import '../App.css';
 import { v1 } from 'uuid';
-import { AddItemForm } from './components/addItemForm/AddItemForm';
-import { Header } from './components/header/Header'
 import { Container, Grid, Paper } from '@mui/material';
+import { addTodolistAC, changeFilterTodolistAC, changeTitleTodolistAC, removeTodolistAC, todolistReducer } from '../../features/todolists/model/todolists-reducer';
+import { addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC, tasksReducer } from '../../features/todolists/model/tasks-reducer';
+import { Header } from '../../common/components/Header/Header';
+import { AddItemForm } from '../../common/components/AddItemForm/AddItemForm';
+import { Todolist } from '../../features/todolists/UI/Todolists/Todolist/Todolist';
+
 // Types
 export type FilterValueType = "all" | "active" | "completed"
 
@@ -27,18 +30,22 @@ export type TasksType = {
 
 
 
-function App() {
+function AppWithReducer() {
 
   // ИСХОДНЫЕ ДАННЫЕ, ГЛОБАЛЬНЫЙ СТЕЙТ (Data)
   let todolistId_1 = v1();
   let todolistId_2 = v1();
 
-  const [todolists, setTodolists] = useState<TodolistType[]>([
+
+
+  let [todolists, dispatchToTodolistsReducer] = useReducer(todolistReducer, [
     { id: todolistId_1, title: "what to lean", filter: "all" },
     { id: todolistId_2, title: "what to see", filter: "all" },
   ])
 
-  const [tasks, setTasks] = useState<TasksType>({
+
+
+  let [tasks, dispatchToTasksReducer] = useReducer(tasksReducer, {
     [todolistId_1]: [
       { id: v1(), title: "CSS&HTML", isDone: true },
       { id: v1(), title: "JavaScript", isDone: true },
@@ -57,43 +64,40 @@ function App() {
   // Операции с тудулистами (Todolist-CRUD)
   // добавление нового тудулиста (addTodolist)
   function addTodolist(title: string) {
-    let todolistId = v1();
-    let newTodolist: TodolistType = { id: todolistId, title: title, filter: "all" }
-    setTodolists([newTodolist, ...todolists])
-    setTasks({ ...tasks, [todolistId]: [] })
+    let action = addTodolistAC(title);
+    dispatchToTodolistsReducer(action);
+    dispatchToTasksReducer(action)
   }
   // удаление тудулиста (removeTodolist)
   function removeTodolist(todolistId: string) {
-    setTodolists(todolists.filter(todolist => todolist.id !== todolistId));
-    delete tasks[todolistId];
-    setTasks(tasks)
+    dispatchToTodolistsReducer(removeTodolistAC(todolistId))
+    dispatchToTasksReducer(removeTodolistAC(todolistId))
   }
   // Функция которая принимает измененный titleTodolist и заносит его в стейт
   function changeNewTitleTodolist(todolistId: string, title: string) {
-    setTodolists(todolists.map(todolist => todolist.id === todolistId ? { ...todolist, title } : todolist))
+    dispatchToTodolistsReducer(changeTitleTodolistAC(todolistId, title))
   }
 
   // Операции с тасками (Tasks-CRUD)
   // пуш отфильтрованного массива тасок в стейт
   const cahgeFilter = (todolistId: string, filter: FilterValueType) => {
-    setTodolists(todolists.map(el => el.id === todolistId ? { ...el, filter } : el))
+    dispatchToTodolistsReducer(changeFilterTodolistAC(todolistId, filter,))
   }
   // Удаление тасок (removeTask)
   function removeTask(todolistId: string, id: string) {
-    setTasks({ ...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== id) });
+    dispatchToTasksReducer(removeTaskAC(todolistId, id))
   }
   // добавление тасок (addTask)
   function addTask(todolistId: string, title: string) {
-    let newTask: TaskType = { id: v1(), title: title.trim(), isDone: false }
-    setTasks({ ...tasks, [todolistId]: [newTask, ...tasks[todolistId]] })
+    dispatchToTasksReducer(addTaskAC(todolistId, title))
   }
   // изменение статуса таски changeStatus
   function changeStatus(todolistId: string, taskId: string, isDone: boolean) {
-    setTasks({ ...tasks, [todolistId]: tasks[todolistId].map(task => task.id === taskId ? { ...task, isDone } : task) })
+    dispatchToTasksReducer(changeStatusTaskAC(todolistId, taskId, isDone))
   }
   // Функция которая принимает измененный titleTask и заносит его в стейт
   function changeNewTaskTitle(todolistId: string, taskId: string, title: string) {
-    setTasks({ ...tasks, [todolistId]: tasks[todolistId].map(task => task.id === taskId ? { ...task, title } : task) })
+    dispatchToTasksReducer(changeTitleTaskAC(todolistId, taskId, title))
   }
 
 
@@ -108,7 +112,7 @@ function App() {
           {todolists.map((tl) => {
             return <Grid item>
               <Paper elevation={3} style={{ padding: "30px" }}>
-                {/* <Todolist
+                <Todolist
                   key={tl.id}
                   id={tl.id}
                   title={tl.title}
@@ -121,7 +125,7 @@ function App() {
                   removeTodolist={removeTodolist}
                   changeNewTaskTitle={changeNewTaskTitle}
                   changeNewTitleTodolist={changeNewTitleTodolist}
-                /> */}
+                />
               </Paper>
             </Grid>
           })}
@@ -131,4 +135,4 @@ function App() {
   )
 }
 
-export default App;
+export default AppWithReducer;

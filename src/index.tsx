@@ -2,9 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import AppWithRedux from './AppWithRedux';
 import { Provider } from 'react-redux';
-import { store } from './state/store';
+import { store } from './app/store';
+import App from './app/AppAndAppWithReducer/App';
+import AppWithRedux from './app/AppWithRedux';
+import AppWithReducer from './app/AppAndAppWithReducer/AppWithReducers';
 
 
 const root = ReactDOM.createRoot(
@@ -12,6 +14,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Provider store={store}>
+    {/* <App /> */}
+    {/* <AppWithReducer /> */}
     <AppWithRedux />
   </Provider>
 );

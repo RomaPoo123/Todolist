@@ -1,8 +1,9 @@
 import React from "react";
-import { Todolist } from "../components/todolist/Todolist";
+
 import { Meta, StoryObj } from "@storybook/react/*";
 import { action } from "@storybook/addon-actions"
 import { v1 } from "uuid";
+import { Todolist } from "../features/todolists/UI/Todolists/Todolist/Todolist";
 
 
 

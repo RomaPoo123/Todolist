@@ -1,7 +1,16 @@
-import { TasksType } from "../AppWithRedux";
 import { v1 } from "uuid";
 import { RemoveTodolistActionType } from "./todolists-reducer";
 import { AddTodolistActionType } from "./todolists-reducer";
+
+
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
+}
+export type TasksType = {
+    [todolistId: string]: TaskType[]
+}
 
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
 export type AddTaskActionType = ReturnType<typeof addTaskAC>

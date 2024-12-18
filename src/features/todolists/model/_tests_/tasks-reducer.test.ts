@@ -1,8 +1,7 @@
-import { TaskType } from "../App";
-import { TasksType } from "../App";
 import { v1 } from "uuid";
-import { addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC, tasksReducer } from "./tasks-reducer";
-import { addTodolistAC, removeTodolistAC } from "./todolists-reducer";
+import { addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC, tasksReducer, TasksType } from "../tasks-reducer";
+import { addTodolistAC, removeTodolistAC } from "../todolists-reducer";
+
 
 let startState: TasksType
 
