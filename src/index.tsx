@@ -7,6 +7,7 @@ import { store } from './app/store';
 import App from './app/AppAndAppWithReducer/App';
 import AppWithRedux from './app/AppWithRedux';
 import AppWithReducer from './app/AppAndAppWithReducer/AppWithReducers';
+import { AppHttpRequests } from './app/AppHttpRequests';
 
 
 const root = ReactDOM.createRoot(
@@ -16,7 +17,8 @@ root.render(
   <Provider store={store}>
     {/* <App /> */}
     {/* <AppWithReducer /> */}
-    <AppWithRedux />
+    {/* <AppWithRedux /> */}
+    <AppHttpRequests />
   </Provider>
 );
 

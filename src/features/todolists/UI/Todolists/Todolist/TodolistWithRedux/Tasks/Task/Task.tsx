@@ -5,7 +5,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { useAppDispatch } from "../../../../../../../../common/hooks/useAppDispatch";
 import { changeStatusTaskAC, changeTitleTaskAC, removeTaskAC, TaskType } from "../../../../../../model/tasks-reducer";
 import { TodolistType } from "../../../../../../model/todolists-reducer";
-import { EditableSpan } from "../../../../../../../../common/components/EditableSpan/EditableSpan";
+import { EditableSpan } from "common/components/EditableSpan/EditableSpan";
 
 
 
