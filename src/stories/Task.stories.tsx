@@ -1,18 +1,15 @@
 import React from "react";
-import { Meta, StoryFn, StoryObj } from '@storybook/react';
-import { action } from "@storybook/addon-actions"
+import { Meta, StoryFn, StoryObj } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
 import { v1 } from "uuid";
 import { userEvent, within } from "@storybook/test";
 import { Description } from "@mui/icons-material";
 import { Task, TaskPropsType } from "../features/todolists/UI/Todolists/Todolist/TodolistWithRedux/Tasks/Task/Task";
-import { TaskType } from "../features/todolists/model/tasks-reducer";
 import { Todolist } from "../features/todolists/UI/Todolists/Todolist/Todolist";
 
-
-
 const meta: Meta<typeof Todolist> = {
-    title: "UI/Todolist Component",
-    component: Todolist,
+  title: "UI/Todolist Component",
+  component: Todolist,
 };
 
 export default meta;
@@ -20,18 +17,15 @@ export default meta;
 type Story = StoryObj<typeof Todolist>;
 
 export const BaseExample: Story = {
-    args: {
-        id: v1(),
-        title: "new Todolist",
-        tasks: [],
-        filter: "all",
-        removeTodolist: action("fdsfdsds"),
-        changeNewTitleTodolist: action("fsfdsfsd")
-    }
-}
-
-
-
+  args: {
+    id: v1(),
+    title: "new Todolist",
+    tasks: [],
+    filter: "all",
+    removeTodolist: action("fdsfdsds"),
+    changeNewTitleTodolist: action("fsfdsfsd"),
+  },
+};
 
 // const meta: Meta<TaskPropsType> = {
 //     title: "UI/Task Component",
@@ -61,7 +55,6 @@ export const BaseExample: Story = {
 // }
 // export default meta;
 
-
 // const Template: StoryFn<TaskPropsType> = (args) => <Task {...args} />
 
 // const storieTask: TaskType = { id: v1(), title: "One Title", isDone: false };
@@ -89,4 +82,3 @@ export const BaseExample: Story = {
 // IsDoneExample.args = {
 //     task: { id: v1(), title: "One Title", isDone: true },
 // }
-

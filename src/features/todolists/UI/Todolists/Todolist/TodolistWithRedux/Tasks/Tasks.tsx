@@ -1,43 +1,51 @@
-import { List } from "@mui/material"
-import { useAppSelector } from "../../../../../../../common/hooks/useAppSelector"
-import { selectTasks } from "../../../../../model/tasksSelector"
-import { TodolistType } from "../../../../../model/todolists-reducer"
-import { Task } from "./Task/Task"
+import { List } from "@mui/material";
+import { useAppSelector } from "../../../../../../../common/hooks/useAppSelector";
+import { selectTasks } from "../../../../../model/tasksSelector";
+import { Task } from "./Task/Task";
+import { DomainTodolist } from "features/todolists/model/todolists-reducer";
+import { useEffect } from "react";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { fetchTasksTC } from "features/todolists/model/tasks-reducer";
+import { TaskStatus } from "common/enums/enums";
 
 type Props = {
-    todolist: TodolistType
-}
+  todolist: DomainTodolist;
+};
 
 export const Tasks = ({ todolist }: Props) => {
+  // берем часть Store, а именно tasks
+  const tasks = useAppSelector(selectTasks);
+  const dispatch = useAppDispatch();
 
-    // берем часть Store, а именно tasks
-    const tasks = useAppSelector(selectTasks);
+  useEffect(() => {
+    dispatch(fetchTasksTC({ todolistId: todolist.id }));
+  }, []);
 
-    // кладем в переменую таски тудулиста
-    const allTodolistTasks = tasks[todolist.id];
+  // кладем в переменую таски тудулиста
+  const allTodolistTasks = tasks[todolist.id];
 
-    let tasksForTodolist = allTodolistTasks;
+  let tasksForTodolist = allTodolistTasks;
 
-    //  если значение filter active филтруем таски
-    if (todolist.filter === "active") {
-        tasksForTodolist = allTodolistTasks.filter(task => !task.isDone)
-    }
-    //  если значение completed active филтруем таски
-    if (todolist.filter === "completed") {
-        tasksForTodolist = allTodolistTasks.filter(task => task.isDone)
-    }
+  //  если значение filter active филтруем таски
+  if (todolist.filter === "active") {
+    tasksForTodolist = allTodolistTasks.filter((task) => task.status === TaskStatus.New);
+  }
+  //  если значение completed active филтруем таски
+  if (todolist.filter === "completed") {
+    tasksForTodolist = allTodolistTasks.filter((task) => task.status === TaskStatus.Completed);
+  }
 
-    return (
-        <>
-            {
-                tasksForTodolist.length === 0 ?
-                    <span>Тасок нет</span> :
-                    <List>
-                        {tasksForTodolist.map(task => {
-                            return <Task todolist={todolist} task={task} />
-                        })}
-                    </List>
-            }
-        </>
-    )
-}
+  return (
+    <>
+      {tasksForTodolist?.length === 0 ? (
+        <span>Тасок нет</span>
+      ) : (
+        <List>
+          {tasksForTodolist?.map((task) => {
+            return <Task todolist={todolist} task={task} />;
+          })}
+        </List>
+      )}
+    </>
+  );
+};
