@@ -218,6 +218,7 @@ test("new array should be added when new todolist is added", () => {
     addedDate: "",
     order: 0,
     filter: "all",
+    entityStatus: "idle"
   };
 
   const action = addTodolistAC({ todolist: newTodolist });

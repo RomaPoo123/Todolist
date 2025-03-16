@@ -3,12 +3,14 @@ import { ChangeEvent, useState, KeyboardEvent } from "react";
 import { TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import s from "./AddItemForm.module.css"
 
 type AddItemFormType = {
   addItem: (title: string) => void;
+  disabled?: boolean
 };
 
-export const AddItemForm = React.memo(({ addItem }: AddItemFormType) => {
+export const AddItemForm = React.memo(({ addItem, disabled }: AddItemFormType) => {
   const [newItemTitle, setNewItemTitle] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -42,7 +44,7 @@ export const AddItemForm = React.memo(({ addItem }: AddItemFormType) => {
 
   // отрисовка компоненты (UI)
   return (
-    <div>
+    <div className={s.addItemForm}>
       <TextField
         value={newItemTitle}
         label="Type title"
@@ -50,8 +52,10 @@ export const AddItemForm = React.memo(({ addItem }: AddItemFormType) => {
         onKeyPress={onKeyPressHandler}
         error={!!error}
         helperText={error}
+        disabled={disabled}
+        style={{ width: "60%" }}
       />
-      <IconButton onClick={onClickHandler} size="medium">
+      <IconButton onClick={onClickHandler} size="medium" disabled={disabled}>
         <ControlPointIcon />
       </IconButton>
       {/* {error && <div className="error-message">{error}</div>} */}

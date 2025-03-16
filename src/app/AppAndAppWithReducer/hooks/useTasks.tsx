@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TasksType } from "../App";
 import { todolistId_1, todolistId_2 } from "../id_utils";
 import { v1 } from "uuid";

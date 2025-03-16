@@ -13,11 +13,14 @@ import { useAppSelector } from "../../hooks/useAppSelector";
 import { selectAppStatus, selectThemeMode } from "../../../app/appSelector";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { changeThemeAC } from "../../../app/app-reducer";
+import { logoutTC } from "features/auth/model/auth-reducer";
+import { selectIsLoggedin } from "features/auth/model/authSelectors";
 
 export function Header() {
   const dispatch = useAppDispatch();
   const themeMode = useAppSelector(selectThemeMode);
   const status = useAppSelector(selectAppStatus);
+  const isLoggedin = useAppSelector(selectIsLoggedin);
 
   const theme = getTheme(themeMode);
 
@@ -25,21 +28,23 @@ export function Header() {
   const changeModeHandler = () => {
     dispatch(changeThemeAC(themeMode === "light" ? "dark" : "light"));
   };
+  const logoutHandler = () => {
+    dispatch(logoutTC())
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ mb: "30px" }}>
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+        <Toolbar sx={{ display: "flex", justifyContent: "end" }}>
+          {/* <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           <div>
-            <MenuButton>Login</MenuButton>
-            <MenuButton>Logout</MenuButton>
-            <MenuButton background={theme.palette.primary.dark}>Fag</MenuButton>
+            {/* <MenuButton>Login</MenuButton> */}
+            {isLoggedin && <MenuButton onClick={logoutHandler}>Logout</MenuButton>}
+            {/* <MenuButton background={theme.palette.primary.dark}>Fag</MenuButton> */}
             <Switch color={"default"} onChange={changeModeHandler} />
           </div>
-          <Button color="inherit">Login</Button>
         </Toolbar>
         {status === "loading" && <LinearProgress />}
       </AppBar>

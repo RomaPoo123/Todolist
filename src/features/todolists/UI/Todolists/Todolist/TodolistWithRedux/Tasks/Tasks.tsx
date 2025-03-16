@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { fetchTasksTC } from "features/todolists/model/tasks-reducer";
 import { TaskStatus } from "common/enums/enums";
-
+import s from "./Tasks.module.css"
 type Props = {
   todolist: DomainTodolist;
 };
@@ -40,7 +40,7 @@ export const Tasks = ({ todolist }: Props) => {
       {tasksForTodolist?.length === 0 ? (
         <span>Тасок нет</span>
       ) : (
-        <List>
+        <List className={s.tasks}>
           {tasksForTodolist?.map((task) => {
             return <Task todolist={todolist} task={task} />;
           })}

@@ -14,6 +14,7 @@ import { DomainTodolist } from "../../../../../../model/todolists-reducer";
 import { EditableSpan } from "common/components";
 import { DomainTask } from "features/todolists/api/tasksApi.types";
 import { TaskStatus } from "common/enums/enums";
+import s from './Task.module.css'
 
 export type TaskPropsType = {
   todolist: DomainTodolist;
@@ -35,21 +36,21 @@ export const Task = React.memo(({ task, todolist }: TaskPropsType) => {
 
   const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     let status: TaskStatus = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New;
-    debugger;
     dispatch(updateTaskTC({ task: { ...task, status } }));
   };
   const onChangeTitleHandler = (newTitle: string) => {
-    debugger;
     dispatch(updateTaskTC({ task: { ...task, title: newTitle } }));
   };
 
   return (
-    <li key={task.id} className={task.status === TaskStatus.Completed ? "trueTask" : ""}>
-      <Checkbox checked={task.status === TaskStatus.Completed} onChange={onChangeStatusHandler} />
-      <EditableSpan title={task.title} onChange={onChangeTitleHandler} />
+    <li key={task.id} className={`${s.task} ${task.status === TaskStatus.Completed && s.CompletedTask}`}>
+      <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <Checkbox checked={task.status === TaskStatus.Completed} onChange={onChangeStatusHandler} style={{ paddingLeft: "0px" }} />
+        <EditableSpan title={task.title} onChange={onChangeTitleHandler} />
+      </div>
       <IconButton aria-label="delete" size="small" onClick={() => removeTaskCallback(task.id)}>
         <DeleteIcon />
       </IconButton>
-    </li>
+    </li >
   );
 });

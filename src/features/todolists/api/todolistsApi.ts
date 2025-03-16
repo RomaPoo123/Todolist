@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Todolist } from "./todolistsApi.types";
 import { instance } from "../../../common/instance/instance";
 import { BaseResponse } from "../../../common/types/types";

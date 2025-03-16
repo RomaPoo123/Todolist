@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import "../App.css";
-import { v1 } from "uuid";
 import { Container, Grid, Paper } from "@mui/material";
 import { useTodolists } from "./hooks/useTodolist";
 import { useTasks } from "./hooks/useTasks";
@@ -8,6 +5,7 @@ import { Header } from "../../common/components/Header/Header";
 import { AddItemForm } from "../../common/components/AddItemForm/AddItemForm";
 import { Todolist } from "../../features/todolists/UI/Todolists/Todolist/Todolist";
 import { DomainTask } from "features/todolists/api/tasksApi.types";
+import "../App.css";
 // Types
 export type FilterValueType = "all" | "active" | "completed";
 
@@ -33,7 +31,7 @@ function App() {
     addStateForNewTodolist,
   } = useTasks();
 
-  let { todolists, setTodolists, cahgeFilter, changeNewTitleTodolist, removeTodolist, addTodolist } = useTodolists(
+  let { todolists, cahgeFilter, changeNewTitleTodolist, removeTodolist, addTodolist } = useTodolists(
     completelyRemoveTasksForTodolist,
     addStateForNewTodolist,
   );

@@ -2,7 +2,6 @@ import Checkbox from "@mui/material/Checkbox";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { AddItemForm } from "../common/components/AddItemForm/AddItemForm";
 import { EditableSpan } from "../common/components/EditableSpan/EditableSpan";
-import axios from "axios";
 import { Todolist } from "../features/todolists/api/todolistsApi.types";
 import { DomainTask, UpdateTaskModel } from "../features/todolists/api/tasksApi.types";
 import { todolistsApi } from "../features/todolists/api/todolistsApi";

@@ -1,12 +1,10 @@
-import React, { useReducer, useState } from "react";
-import "../App.css";
+import { useReducer } from "react";
 import { v1 } from "uuid";
 import { Container, Grid, Paper } from "@mui/material";
 import {
   addTodolistAC,
   changeFilterTodolistAC,
   changeTitleTodolistAC,
-  DomainTodolist,
   removeTodolistAC,
   todolistReducer,
 } from "../../features/todolists/model/todolists-reducer";
@@ -22,6 +20,7 @@ import { AddItemForm } from "../../common/components/AddItemForm/AddItemForm";
 import { Todolist } from "../../features/todolists/UI/Todolists/Todolist/Todolist";
 import { TaskPriority, TaskStatus } from "common/enums/enums";
 import { DomainTask } from "features/todolists/api/tasksApi.types";
+import "../App.css";
 
 // Types
 export type FilterValueType = "all" | "active" | "completed";
@@ -48,8 +47,8 @@ function AppWithReducer() {
   let todolistId_2 = v1();
 
   let [todolists, dispatchToTodolistsReducer] = useReducer(todolistReducer, [
-    { id: todolistId_1, title: "what to lean", filter: "all", order: 0, addedDate: "" },
-    { id: todolistId_2, title: "what to see", filter: "all", order: 0, addedDate: "" },
+    { id: todolistId_1, title: "what to lean", filter: "all", order: 0, addedDate: "", entityStatus: "idle" },
+    { id: todolistId_2, title: "what to see", filter: "all", order: 0, addedDate: "", entityStatus: "idle" },
   ]);
 
   let [tasks, dispatchToTasksReducer] = useReducer(tasksReducer, {
@@ -142,7 +141,7 @@ function AppWithReducer() {
       addedDate: "",
       order: 0,
     };
-    let action = addTodolistAC({ todolist: { ...newTodolist, filter: "all" } });
+    let action = addTodolistAC({ todolist: { ...newTodolist, filter: "all", entityStatus: "idle" } });
     dispatchToTodolistsReducer(action);
     dispatchToTasksReducer(action);
   }

@@ -2,6 +2,7 @@ import { useAppDispatch } from "../../../../../../../common/hooks/useAppDispatch
 import { useCallback } from "react";
 import { changeFilterTodolistAC, FilterValueType, DomainTodolist } from "../../../../../model/todolists-reducer";
 import { Box, Button } from "@mui/material";
+import s from './FilterTasksButton.module.css'
 
 type Props = {
   todolist: DomainTodolist;
@@ -21,7 +22,7 @@ export const FilterTasksButtons = ({ todolist }: Props) => {
   );
 
   return (
-    <Box>
+    <Box className={s.FiltertasksButton}>
       <Button
         size="small"
         variant={filter === "all" ? "contained" : "outlined"}

@@ -1,16 +1,26 @@
-import { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useCallback, useEffect } from "react";
 import { Container, Grid } from "@mui/material";
 import { AddItemForm } from "../common/components/AddItemForm/AddItemForm";
-import { addTodolistAC, addTodolistTC } from "../features/todolists/model/todolists-reducer";
+import { addTodolistTC } from "../features/todolists/model/todolists-reducer";
 import { Todolists } from "../features/todolists/UI/Todolists/Todolists";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { useAppSelector } from "common/hooks/useAppSelector";
+import { selectIsLoggedin } from "features/auth/model/authSelectors";
+import { useNavigate } from "react-router";
+import { Path } from "common/routing/Routing";
 
 export const Main = () => {
   const dispatch = useAppDispatch();
-  // ЛОГИКА!! CRUD-операции (logic)
-  // Операции с тудулистами (Todolist-CRUD)
-  // добавление нового тудулиста (addTodolist)
+  const isLoggedin = useAppSelector(selectIsLoggedin);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoggedin) {
+      navigate(Path.Login)
+    }
+  }, [isLoggedin])
+
+
   const addTodolist = useCallback(
     (title: string) => {
       dispatch(addTodolistTC({ title }));
