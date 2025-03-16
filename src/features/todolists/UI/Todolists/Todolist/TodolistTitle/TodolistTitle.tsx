@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { EditableSpan } from "../../../../../../../common/components/EditableSpan/EditableSpan";
+import { EditableSpan } from "../../../../../../common/components/EditableSpan/EditableSpan";
 import {
   DomainTodolist,
   removeTodolistTC,
   updateTodolistTC,
-} from "../../../../../model/todolists-reducer";
-import { useAppDispatch } from "../../../../../../../common/hooks/useAppDispatch";
+} from "../../../../model/todolists-reducer";
+import { useAppDispatch } from "../../../../../../common/hooks/useAppDispatch";
 import s from ".//TodolistTitle.module.css"
 
 type Props = {

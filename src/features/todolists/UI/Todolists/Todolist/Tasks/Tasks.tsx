@@ -1,6 +1,6 @@
 import { List } from "@mui/material";
-import { useAppSelector } from "../../../../../../../common/hooks/useAppSelector";
-import { selectTasks } from "../../../../../model/tasksSelector";
+import { useAppSelector } from "../../../../../../common/hooks/useAppSelector";
+import { selectTasks } from "../../../../model/tasksSelector";
 import { Task } from "./Task/Task";
 import { DomainTodolist } from "features/todolists/model/todolists-reducer";
 import { useEffect } from "react";

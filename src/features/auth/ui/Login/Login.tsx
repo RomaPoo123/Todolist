@@ -12,7 +12,7 @@ import { getTheme } from 'common/theme/theme'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import styles from "./Login.module.css"
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
-import { loginTC } from 'features/auth/model/auth-reducer'
+import { loginTC } from 'features/auth/model/authSlice'
 import { selectIsLoggedin } from 'features/auth/model/authSelectors'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'

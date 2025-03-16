@@ -12,8 +12,8 @@ import { getTheme } from "../../theme/theme";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { selectAppStatus, selectThemeMode } from "../../../app/appSelector";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { changeThemeAC } from "../../../app/app-reducer";
-import { logoutTC } from "features/auth/model/auth-reducer";
+import { changeTheme } from "../../../app/app-reducer";
+import { logoutTC } from "features/auth/model/authSlice";
 import { selectIsLoggedin } from "features/auth/model/authSelectors";
 
 export function Header() {
@@ -26,7 +26,7 @@ export function Header() {
 
   // CallBack для изменеия темы приложения
   const changeModeHandler = () => {
-    dispatch(changeThemeAC(themeMode === "light" ? "dark" : "light"));
+    dispatch(changeTheme({ themeMode: themeMode === "light" ? "dark" : "light" }));
   };
   const logoutHandler = () => {
     dispatch(logoutTC())

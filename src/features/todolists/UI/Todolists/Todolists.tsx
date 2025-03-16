@@ -1,7 +1,7 @@
 import { Grid, Paper } from "@mui/material";
 import { useAppSelector } from "../../../../common/hooks/useAppSelector";
 import { selectTodolists } from "../../model/todolistsSelector";
-import { Todolist } from "./Todolist/TodolistWithRedux/TodolistWithRedux";
+import { Todolist } from "./Todolist/Todolist";
 import { useEffect } from "react";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { fetchTodolistsTC } from "features/todolists/model/todolists-reducer";

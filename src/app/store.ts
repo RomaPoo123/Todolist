@@ -3,7 +3,8 @@ import { appReducer } from "./app-reducer";
 import { tasksReducer } from "../features/todolists/model/tasks-reducer";
 import { todolistReducer } from "../features/todolists/model/todolists-reducer";
 import { thunk, ThunkDispatch } from "redux-thunk";
-import { authReducer } from "features/auth/model/auth-reducer";
+import { authReducer } from "features/auth/model/authSlice";
+import { configureStore } from "@reduxjs/toolkit";
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   auth: authReducer,
 });
 
-export const store = legacy_createStore(rootReducer, {}, applyMiddleware(thunk));
+// export const store = legacy_createStore(rootReducer, {}, applyMiddleware(thunk));
+export const store = configureStore({ reducer: rootReducer });
 
 export type AppRootStateType = ReturnType<typeof store.getState>;
 

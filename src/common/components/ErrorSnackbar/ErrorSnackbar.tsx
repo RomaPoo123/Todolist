@@ -4,7 +4,7 @@ import Snackbar from '@mui/material/Snackbar'
 import { useAppSelector } from 'common/hooks/useAppSelector'
 import { selectAppError } from 'app/appSelector'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
-import { setAppErrorAC } from 'app/app-reducer'
+import { setAppError } from 'app/app-reducer'
 
 export const ErrorSnackbar = () => {
     const error = useAppSelector(selectAppError);
@@ -14,7 +14,7 @@ export const ErrorSnackbar = () => {
         if (reason === 'clickaway') {
             return
         }
-        dispatch(setAppErrorAC(null))
+        dispatch(setAppError({ error: null }))
     }
 
     return (

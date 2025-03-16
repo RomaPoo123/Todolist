@@ -6,13 +6,13 @@ import { useAppSelector } from "../common/hooks/useAppSelector";
 import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
 import { Routing } from "common/routing/Routing";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { meTC } from "features/auth/model/auth-reducer";
+import { meTC } from "features/auth/model/authSlice";
 import { selectIsInitialized } from "features/auth/model/authSelectors";
-import s from "./AppWithRedux.module.css"
+import s from "./App.module.css"
 import "./App.css";
 
 
-const AppWithRedux = React.memo(() => {
+const App = React.memo(() => {
   const themeMode = useAppSelector((state) => state.app.themeMode);
   const isInitialized = useAppSelector(selectIsInitialized);
   const dispatch = useAppDispatch();
@@ -43,4 +43,4 @@ const AppWithRedux = React.memo(() => {
   );
 });
 
-export default AppWithRedux;
+export default App;

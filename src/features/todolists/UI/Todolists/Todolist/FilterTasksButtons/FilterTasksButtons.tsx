@@ -1,6 +1,6 @@
-import { useAppDispatch } from "../../../../../../../common/hooks/useAppDispatch";
+import { useAppDispatch } from "../../../../../../common/hooks/useAppDispatch";
 import { useCallback } from "react";
-import { changeFilterTodolistAC, FilterValueType, DomainTodolist } from "../../../../../model/todolists-reducer";
+import { changeFilterTodolistAC, FilterValueType, DomainTodolist } from "../../../../model/todolists-reducer";
 import { Box, Button } from "@mui/material";
 import s from './FilterTasksButton.module.css'
 

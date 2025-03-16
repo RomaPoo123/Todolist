@@ -1,11 +1,10 @@
-import { v1 } from "uuid";
 import { RemoveTodolistActionType } from "./todolists-reducer";
 import { AddTodolistActionType } from "./todolists-reducer";
 import { DomainTask, DomainTaskSchema, UpdateTaskModel } from "../api/tasksApi.types";
 import { tasksApi } from "../api/tasksApi";
 import { AppDispatch } from "app/store";
 import { ResultCode, TaskStatus } from "common/enums/enums";
-import { setAppErrorAC, setAppStatusAC } from "app/app-reducer";
+import { setAppStatus } from "app/app-reducer";
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError";
 import { handleServerAppError } from "common/utils/handleServerAppError";
 
@@ -36,22 +35,22 @@ export const tasksReducer = (state: TasksType = initialState, action: TasksReduc
     case "SET-TASKS":
       const newTasks = DomainTaskSchema.array().parse(action.payload.tasks);
       // return { ...state, [action.payload.todolistId]: action.payload.tasks };
-      return { ...state, [action.payload.todolistId]: newTasks }
+      return { ...state, [action.payload.todolistId]: newTasks };
     case "REMOVE-TASK": {
       let { todolistId, taskId } = action.payload;
       return { ...state, [todolistId]: state[todolistId].filter((task) => task.id !== taskId) };
-    }
+    };
     case "ADD-TASK": {
       let task = action.payload.task;
       return { ...state, [task.todoListId]: [task, ...state[task.todoListId]] };
-    }
+    };
     case "UPDATE-TASK": {
       let { task } = action.payload;
       return {
         ...state,
         [task.todoListId]: state[task.todoListId].map((t) => (t.id === task.id ? { ...task } : t)),
       };
-    }
+    };
     case "ADD-TODOLIST":
       return { [action.payload.todolist.id]: [], ...state };
     case "REMOVE-TODOLIST":
@@ -101,19 +100,19 @@ export const changeStatusTaskAC = (todolistId: string, taskId: string, status: T
 
 // ThunkCreater
 export const fetchTasksTC = (arg: { todolistId: string }) => (dispatch: AppDispatch) => {
-  dispatch(setAppStatusAC('loading'));
+  dispatch(setAppStatus({ status: 'loading' }));
   tasksApi.getTasks(arg.todolistId).then((res) => {
-    dispatch(setAppStatusAC("succeeded"));
+    dispatch(setAppStatus({ status: "succeeded" }));
     dispatch(setTasksAC({ todolistId: arg.todolistId, tasks: res.data.items }));
   }).catch((err) => {
     handleServerNetworkError(err.massage, dispatch)
   });
 };
 export const removeTaskTC = (arg: { todolistId: string; taskId: string }) => (dispatch: AppDispatch) => {
-  dispatch(setAppStatusAC('loading'));
+  dispatch(setAppStatus({ status: 'loading' }));
   tasksApi.removeTask(arg).then((res) => {
     if (res.data.resultCode === ResultCode.Success) {
-      dispatch(setAppStatusAC('succeeded'));
+      dispatch(setAppStatus({ status: 'succeeded' }));
       dispatch(removeTaskAC(arg));
     } else {
       handleServerAppError(dispatch, res.data);
@@ -121,14 +120,14 @@ export const removeTaskTC = (arg: { todolistId: string; taskId: string }) => (di
   }).catch((err) => {
     handleServerNetworkError(err.massage, dispatch)
   }).finally(() => {
-    dispatch(setAppStatusAC('idle'))
+    dispatch(setAppStatus({ status: 'idle' }))
   });
 };
 export const addTaskTC = (arg: { todolistId: string; title: string }) => (dispatch: AppDispatch) => {
-  dispatch(setAppStatusAC('loading'));
+  dispatch(setAppStatus({ status: 'loading' }));
   tasksApi.createTask(arg).then((res) => {
     if (res.data.resultCode === ResultCode.Success) {
-      dispatch(setAppStatusAC("succeeded"));
+      dispatch(setAppStatus({ status: "succeeded" }));
       dispatch(addTaskAC({ task: res.data.data.item }));
     } else {
       handleServerAppError(dispatch, res.data);
@@ -136,7 +135,7 @@ export const addTaskTC = (arg: { todolistId: string; title: string }) => (dispat
   }).catch((err) => {
     handleServerNetworkError(err.massage, dispatch)
   }).finally(() => {
-    dispatch(setAppStatusAC('idle'))
+    dispatch(setAppStatus({ status: 'idle' }))
   });
 };
 export const updateTaskTC = (arg: { task: DomainTask }) => (dispatch: AppDispatch) => {
@@ -149,10 +148,10 @@ export const updateTaskTC = (arg: { task: DomainTask }) => (dispatch: AppDispatc
     priority: task.priority,
     startDate: task.startDate,
   };
-  dispatch(setAppStatusAC('loading'));
+  dispatch(setAppStatus({ status: 'loading' }));
   tasksApi.updateTask({ todolistId: task.todoListId, taskId: task.id, model }).then((res) => {
     if (res.data.resultCode === ResultCode.Success) {
-      dispatch(setAppStatusAC("succeeded"));
+      dispatch(setAppStatus({ status: "succeeded" }));
       dispatch(updateTaskAC({ task: res.data.data.item }));
     } else {
       handleServerAppError(dispatch, res.data)
@@ -160,6 +159,6 @@ export const updateTaskTC = (arg: { task: DomainTask }) => (dispatch: AppDispatc
   }).catch((err) => {
     handleServerNetworkError(err.massage, dispatch)
   }).finally(() => {
-    dispatch(setAppStatusAC('idle'))
+    dispatch(setAppStatus({ status: 'idle' }))
   });;
 };

@@ -4,21 +4,15 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
-import App from "./app/AppAndAppWithReducer/App";
-import AppWithRedux from "./app/AppWithRedux";
-import AppWithReducer from "./app/AppAndAppWithReducer/AppWithReducers";
-import { AppHttpRequests } from "./app/AppHttpRequests";
 import { BrowserRouter } from "react-router";
+import App from "./app/App";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <BrowserRouter>
     <Provider store={store}>
-      {/* <App /> */}
-      {/* <AppWithReducer /> */}
-      <AppWithRedux />
-      {/* <AppHttpRequests /> */}
+      <App />
     </Provider>,
   </BrowserRouter>
 
