@@ -6,19 +6,18 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import TextField from '@mui/material/TextField'
-import { selectThemeMode } from 'app/appSelector'
 import { useAppSelector } from 'common/hooks/useAppSelector'
 import { getTheme } from 'common/theme/theme'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import styles from "./Login.module.css"
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
-import { loginTC } from 'features/auth/model/authSlice'
-import { selectIsLoggedin } from 'features/auth/model/authSelectors'
+import { loginTC, selectIsLoggedIn } from 'features/auth/model/authSlice'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { Path } from 'common/routing/Routing'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Inputs, loginSchema } from 'features/auth/lib/schemas/loginSchema'
+import { selectAppThemeMode } from 'app/appSlice'
 
 
 // export type LoginInputs = {
@@ -29,12 +28,12 @@ import { Inputs, loginSchema } from 'features/auth/lib/schemas/loginSchema'
 // }
 
 export const Login = () => {
-    const themeMode = useAppSelector(selectThemeMode)
+    const themeMode = useAppSelector(selectAppThemeMode)
     const theme = getTheme(themeMode)
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const isLoggedin = useAppSelector(selectIsLoggedin);
+    const isLoggedin = useAppSelector(selectIsLoggedIn);
 
     const {
         register,

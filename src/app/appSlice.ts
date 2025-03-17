@@ -4,7 +4,7 @@ export type ThemeMode = "dark" | "light";
 export type RequestStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 
-type InitialState = typeof initialState;
+// type InitialState = typeof initialState;
 
 // type ChangeThemeActionType = ReturnType<typeof changeThemeAC>;
 // type ChangeStatusActionType = ReturnType<typeof setAppStatusAC>
@@ -12,36 +12,41 @@ type InitialState = typeof initialState;
 
 // type ActionsType = ChangeThemeActionType | ChangeStatusActionType | SetAppErrorActionType;
 
-const initialState = {
-  themeMode: "light" as ThemeMode,
-  status: 'idle' as RequestStatus,
-  error: null as string | null
-};
+// const initialState = {
+//   themeMode: "light" as ThemeMode,
+//   status: 'idle' as RequestStatus,
+//   error: null as string | null
+// };
 
 
 export const appSlice = createSlice({
-  name: "App",
+  name: 'applol',
   initialState: {
     themeMode: "light" as ThemeMode,
     status: 'idle' as RequestStatus,
     error: null as string | null
   },
-  reducers: {
-    changeTheme: (state, action: PayloadAction<{ themeMode: ThemeMode }>) => {
+  selectors: {
+    selectAppError: (state) => state.error,
+    selectAppThemeMode: (state) => state.themeMode,
+    selectAppStatus: (state) => state.status
+  },
+  reducers: create => ({
+    changeTheme: create.reducer<{ themeMode: ThemeMode }>((state, action) => {
       state.themeMode = action.payload.themeMode
-    },
-    setAppStatus: (state, action: PayloadAction<{ status: RequestStatus }>) => {
+    }),
+    setAppStatus: create.reducer<{ status: RequestStatus }>((state, action) => {
       state.status = action.payload.status
-    },
-    setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
+    }),
+    setAppError: create.reducer<{ error: string | null }>((state, action) => {
       state.error = action.payload.error
-    }
-  }
+    })
+  })
 })
 
 export const appReducer = appSlice.reducer;
-
-export const { changeTheme, setAppStatus, setAppError } = appSlice.actions
+export const { changeTheme, setAppStatus, setAppError } = appSlice.actions;
+export const { selectAppError, selectAppThemeMode, selectAppStatus } = appSlice.selectors;
 
 
 

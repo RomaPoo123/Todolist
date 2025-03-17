@@ -6,7 +6,7 @@ import {
   DomainTodolist,
   removeTodolistTC,
   updateTodolistTC,
-} from "../../../../model/todolists-reducer";
+} from "../../../../model/todolistSlice";
 import { useAppDispatch } from "../../../../../../common/hooks/useAppDispatch";
 import s from ".//TodolistTitle.module.css"
 

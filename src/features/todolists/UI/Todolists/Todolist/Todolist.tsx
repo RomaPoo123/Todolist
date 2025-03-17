@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import { DomainTodolist } from "../../../model/todolists-reducer";
-import { addTaskTC } from "../../../model/tasks-reducer";
+import { DomainTodolist } from "../../../model/todolistSlice";
+import { addTaskTC } from "../../../model/tasksSlice";
 import { AddItemForm } from "../../../../../common/components/AddItemForm/AddItemForm";
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons";
 import { Tasks } from "./Tasks/Tasks";

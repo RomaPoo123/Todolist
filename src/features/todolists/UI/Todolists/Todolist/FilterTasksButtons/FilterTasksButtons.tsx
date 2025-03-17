@@ -1,6 +1,6 @@
 import { useAppDispatch } from "../../../../../../common/hooks/useAppDispatch";
 import { useCallback } from "react";
-import { changeFilterTodolistAC, FilterValueType, DomainTodolist } from "../../../../model/todolists-reducer";
+import { changeFilterTodolist, FilterValueType, DomainTodolist } from "../../../../model/todolistSlice";
 import { Box, Button } from "@mui/material";
 import s from './FilterTasksButton.module.css'
 
@@ -16,7 +16,7 @@ export const FilterTasksButtons = ({ todolist }: Props) => {
   // пуш отфильтрованного массива тасок в стейт
   const cahgeFilterHandler = useCallback(
     (filter: FilterValueType) => {
-      dispatch(changeFilterTodolistAC(id, filter));
+      dispatch(changeFilterTodolist({ todolistId: id, filter }));
     },
     [dispatch],
   );

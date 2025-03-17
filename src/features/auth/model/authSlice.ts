@@ -1,5 +1,5 @@
 import { AppDispatch } from 'app/store';
-import { setAppStatus } from 'app/app-reducer';
+import { setAppStatus } from 'app/appSlice';
 import { authApi } from '../api/authApi';
 import { ResultCode } from 'common/enums/enums';
 import { handleServerAppError } from 'common/utils/handleServerAppError';
@@ -20,6 +20,10 @@ export const authSlice = createSlice({
         isLoggedIn: false,
         isInitialized: false,
     },
+    selectors: {
+        selectIsLoggedIn: (state) => state.isLoggedIn,
+        selectIsInitialized: (state) => state.isInitialized
+    },
     reducers: {
         setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
             state.isLoggedIn = action.payload.isLoggedIn
@@ -30,10 +34,9 @@ export const authSlice = createSlice({
     },
 })
 
-// Action creator также достаем с помощью slice
-export const { setIsLoggedIn, setIsInitialized } = authSlice.actions
-// Создаем reducer при помощи slice
-export const authReducer = authSlice.reducer
+export const { setIsLoggedIn, setIsInitialized } = authSlice.actions;
+export const authReducer = authSlice.reducer;
+export const { selectIsLoggedIn, selectIsInitialized } = authSlice.selectors;
 
 // // thunks
 export const loginTC = (data: Inputs) => (dispatch: AppDispatch) => {

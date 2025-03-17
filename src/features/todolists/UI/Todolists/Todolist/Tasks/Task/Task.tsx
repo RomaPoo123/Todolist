@@ -6,8 +6,8 @@ import { useAppDispatch } from "../../../../../../../common/hooks/useAppDispatch
 import {
   removeTaskTC,
   updateTaskTC,
-} from "../../../../../model/tasks-reducer";
-import { DomainTodolist } from "../../../../../model/todolists-reducer";
+} from "../../../../../model/tasksSlice";
+import { DomainTodolist } from "../../../../../model/todolistSlice";
 import { EditableSpan } from "common/components";
 import { DomainTask } from "features/todolists/api/tasksApi.types";
 import { TaskStatus } from "common/enums/enums";

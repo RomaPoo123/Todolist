@@ -1,10 +1,9 @@
 import { Grid, Paper } from "@mui/material";
 import { useAppSelector } from "../../../../common/hooks/useAppSelector";
-import { selectTodolists } from "../../model/todolistsSelector";
 import { Todolist } from "./Todolist/Todolist";
 import { useEffect } from "react";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { fetchTodolistsTC } from "features/todolists/model/todolists-reducer";
+import { fetchTodolistsTC, selectTodolists } from "features/todolists/model/todolistSlice";
 
 export const Todolists = () => {
   const todolists = useAppSelector(selectTodolists);

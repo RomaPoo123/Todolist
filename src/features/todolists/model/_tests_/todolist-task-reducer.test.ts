@@ -1,6 +1,6 @@
 import { v1 } from "uuid";
-import { tasksReducer, TasksType } from "../tasks-reducer";
-import { addTodolistAC, todolistReducer, DomainTodolist } from "../todolists-reducer";
+import { tasksReducer, TasksType } from "../tasksSlice";
+import { addTodolistAC, todolistReducer, DomainTodolist } from "../todolistSlice";
 
 test("ids should be equals", () => {
   // start Data

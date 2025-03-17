@@ -6,8 +6,8 @@ import {
   removeTaskAC,
   tasksReducer,
   TasksType,
-} from "../tasks-reducer";
-import { addTodolistAC, DomainTodolist, removeTodolistAC } from "../todolists-reducer";
+} from "../tasksSlice";
+import { addTodolistAC, DomainTodolist, removeTodolistAC } from "../todolistSlice";
 import { TaskPriority, TaskStatus } from "common/enums/enums";
 import { DomainTask } from "features/todolists/api/tasksApi.types";
 

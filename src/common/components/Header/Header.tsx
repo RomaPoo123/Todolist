@@ -10,17 +10,16 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { MenuButton } from "../MenuButton/MenuButton";
 import { getTheme } from "../../theme/theme";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { selectAppStatus, selectThemeMode } from "../../../app/appSelector";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { changeTheme } from "../../../app/app-reducer";
-import { logoutTC } from "features/auth/model/authSlice";
-import { selectIsLoggedin } from "features/auth/model/authSelectors";
+import { changeTheme, selectAppStatus, selectAppThemeMode } from "../../../app/appSlice";
+import { logoutTC, selectIsLoggedIn } from "features/auth/model/authSlice";
+
 
 export function Header() {
   const dispatch = useAppDispatch();
-  const themeMode = useAppSelector(selectThemeMode);
+  const themeMode = useAppSelector(selectAppThemeMode);
   const status = useAppSelector(selectAppStatus);
-  const isLoggedin = useAppSelector(selectIsLoggedin);
+  const isLoggedin = useAppSelector(selectIsLoggedIn);
 
   const theme = getTheme(themeMode);
 

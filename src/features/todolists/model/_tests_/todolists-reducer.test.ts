@@ -5,7 +5,7 @@ import {
   removeTodolistAC,
   todolistReducer,
   DomainTodolist,
-} from "../todolists-reducer";
+} from "../todolistSlice";
 import { v1 } from "uuid";
 
 let todolistId1 = v1();
