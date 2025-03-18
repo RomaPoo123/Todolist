@@ -6,6 +6,7 @@ import { handleServerAppError } from 'common/utils/handleServerAppError';
 import { handleServerNetworkError } from 'common/utils/handleServerNetworkError';
 import { Inputs } from '../lib/schemas/loginSchema';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { clearState } from 'common/actions/clearState';
 
 export type InitialStateType = typeof initialState
 
@@ -62,6 +63,7 @@ export const logoutTC = () => (dispatch: AppDispatch) => {
         if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatus({ status: "succeeded" }));
             dispatch(setIsLoggedIn({ isLoggedIn: false }));
+            dispatch(clearState());
             localStorage.removeItem('sn-token')
         } else {
             handleServerAppError(dispatch, res.data);

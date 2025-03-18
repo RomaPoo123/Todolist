@@ -20,7 +20,7 @@ export type RequestStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 
 export const appSlice = createSlice({
-  name: 'applol',
+  name: 'app',
   initialState: {
     themeMode: "light" as ThemeMode,
     status: 'idle' as RequestStatus,

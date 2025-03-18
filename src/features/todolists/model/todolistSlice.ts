@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import { AppDispatch } from "../../../app/store";
 import { Todolist, TodolistSchema } from "../api/todolistsApi.types";
 import { todolistsApi } from "../api/todolistsApi";
@@ -6,6 +7,7 @@ import { ResultCode } from "common/enums/enums";
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError";
 import { handleServerAppError } from "common/utils/handleServerAppError";
 import { createSlice } from "@reduxjs/toolkit";
+import { clearState } from 'common/actions/clearState';
 
 export type FilterValueType = "all" | "active" | "completed";
 
@@ -47,6 +49,12 @@ export const todolistSlice = createSlice({
   name: "todolist",
   initialState: initialState,
   selectors: { selectTodolists: (state) => state },
+  extraReducers: builder => {
+    builder
+      .addCase(clearState.type, () => {
+        return []
+      })
+  },
   reducers: create => ({
     removeTodolist: create.reducer<{ todolistId: string }>((state, action) => {
       const index = state.findIndex(tl => tl.id === action.payload.todolistId);
