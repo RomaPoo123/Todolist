@@ -1,8 +1,8 @@
 import {
-  addTodolistAC,
-  changeFilterTodolistAC,
-  changeTitleTodolistAC,
-  removeTodolistAC,
+  addTodolist,
+  changeFilterTodolist,
+  changeTitleTodolist,
+  removeTodolist,
   todolistReducer,
   DomainTodolist,
 } from "../todolistSlice";
@@ -22,7 +22,7 @@ beforeEach(() => {
 
 test("correct todolist should be removed", () => {
   // change Data
-  const endState = todolistReducer(startState, removeTodolistAC(todolistId1));
+  const endState = todolistReducer(startState, removeTodolist({ todolistId: todolistId1 }));
 
   // testing
   expect(endState.length).toBe(1);
@@ -40,7 +40,7 @@ test("correct todolist should be added", () => {
   };
 
   // change Data
-  const endState = todolistReducer(startState, addTodolistAC({ todolist: newTodolist }));
+  const endState = todolistReducer(startState, addTodolist({ todolist: newTodolist }));
 
   // testing
   expect(endState.length).toBe(3);
@@ -50,7 +50,7 @@ test("correct todolist should be added", () => {
 
 test("correct todolist should change its name", () => {
   // change Data
-  const endState = todolistReducer(startState, changeTitleTodolistAC({ todolistId: todolistId2, title: "LOOOL" }));
+  const endState = todolistReducer(startState, changeTitleTodolist({ todolistId: todolistId2, title: "LOOOL" }));
 
   // testing
   expect(endState.length).toBe(2);
@@ -60,7 +60,7 @@ test("correct todolist should change its name", () => {
 
 test("correct todolist should change its filter", () => {
   // change Data
-  const endState = todolistReducer(startState, changeFilterTodolistAC(todolistId2, "active"));
+  const endState = todolistReducer(startState, changeFilterTodolist({ todolistId: todolistId2, filter: "active" }));
 
   // testing
   expect(endState.length).toBe(2);

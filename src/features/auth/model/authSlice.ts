@@ -7,7 +7,7 @@ import { handleServerNetworkError } from 'common/utils/handleServerNetworkError'
 import { Inputs } from '../lib/schemas/loginSchema';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type InitialStateType = typeof initialState
+export type InitialStateType = typeof initialState
 
 const initialState = {
     isLoggedIn: false,
