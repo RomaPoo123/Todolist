@@ -2,13 +2,10 @@ import { useCallback } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { EditableSpan } from "../../../../../../common/components/EditableSpan/EditableSpan";
-import {
-  DomainTodolist,
-  removeTodolistTC,
-  updateTodolistTC,
-} from "../../../../model/todolistSlice";
+import { DomainTodolist, updateTodolistTC } from "../../../../model/todolistSlice";
 import { useAppDispatch } from "../../../../../../common/hooks/useAppDispatch";
 import s from ".//TodolistTitle.module.css"
+import { useRemoveTodolistMutation, useUpdateTodolistMutation } from "features/todolists/api/todolistsApi";
 
 type Props = {
   todolist: DomainTodolist;
@@ -16,20 +13,18 @@ type Props = {
 
 export const TodolistTitle = ({ todolist }: Props) => {
   const dispatch = useAppDispatch();
-
+  const [removeTodolist] = useRemoveTodolistMutation();
+  const [updateTodolist] = useUpdateTodolistMutation();
   const { title, id, entityStatus } = todolist;
 
   // удаление тудулиста (removeTodolist)
-  const removeTodolistHandler = useCallback(() => {
-    dispatch(removeTodolistTC({ todolistId: id }));
-  }, [dispatch]);
+  const removeTodolistHandler = () => {
+    removeTodolist(id)
+  };
   // Функция которая принимает измененный titleTodolist и заносит его в стейт
-  const updateTodolistHandler = useCallback(
-    (title: string) => {
-      dispatch(updateTodolistTC({ id, title }));
-    },
-    [dispatch],
-  );
+  const updateTodolistHandler = (title: string) => {
+    updateTodolist({ id, title })
+  }
 
   return (
     <div className={s.headerTodolist}>

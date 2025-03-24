@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CircularProgress, CssBaseline, ThemeProvider } from "@mui/material";
 import { Header } from "../common/components/Header/Header";
 import { getTheme } from "../common/theme/theme";
@@ -6,38 +6,48 @@ import { useAppSelector } from "../common/hooks/useAppSelector";
 import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
 import { Routing } from "common/routing/Routing";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { meTC, selectIsInitialized } from "features/auth/model/authSlice";
 
 import s from "./App.module.css"
 import "./App.css";
-import { selectAppThemeMode } from "./appSlice";
+import { selectAppThemeMode, setAppStatus, setIsLoggedIn } from "./appSlice";
+import { useMeQuery } from "features/auth/api/authApi";
+import { ResultCode } from "common/enums/enums";
 
 
 const App = React.memo(() => {
-  const themeMode = useAppSelector(selectAppThemeMode);
-  const isInitialized = useAppSelector(selectIsInitialized);
   const dispatch = useAppDispatch();
+  const themeMode = useAppSelector(selectAppThemeMode);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const { data, isLoading } = useMeQuery();
 
 
   useEffect(() => {
-    dispatch(meTC())
-  }, []);
-
-  if (!isInitialized) {
-    return (
-      <div className={s.circularProgressContainer}>
-        <CircularProgress size={150} thickness={3} />
-      </div>
-    )
-  }
+    if (!isLoading) {
+      if (data?.resultCode === ResultCode.Success) {
+        dispatch(setIsLoggedIn({ isLoggedIn: true }));
+      }
+      setIsInitialized(true)
+    }
+  }, [isLoading, data])
 
 
   return (
     <div className="App">
       <ThemeProvider theme={getTheme(themeMode)}>
         <CssBaseline />
-        <Header />
-        <Routing />
+        {isInitialized && (
+          <>
+            <Header />
+            <Routing />
+          </>
+        )}
+        {!isInitialized && (
+          <>
+            <div className={s.circularProgressContainer}>
+              <CircularProgress size={150} thickness={3} />
+            </div>
+          </>
+        )}
         <ErrorSnackbar />
       </ThemeProvider>
     </div>

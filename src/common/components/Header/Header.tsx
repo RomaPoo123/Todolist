@@ -11,8 +11,11 @@ import { MenuButton } from "../MenuButton/MenuButton";
 import { getTheme } from "../../theme/theme";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { changeTheme, selectAppStatus, selectAppThemeMode } from "../../../app/appSlice";
-import { logoutTC, selectIsLoggedIn } from "features/auth/model/authSlice";
+import { changeTheme, selectAppStatus, selectAppThemeMode, selectIsLoggedIn, setIsLoggedIn } from "../../../app/appSlice";
+import { useLogoutMutation } from "features/auth/api/authApi";
+import { clearState } from "common/actions/clearState";
+import { ResultCode } from "common/enums/enums";
+
 
 
 export function Header() {
@@ -21,6 +24,8 @@ export function Header() {
   const status = useAppSelector(selectAppStatus);
   const isLoggedin = useAppSelector(selectIsLoggedIn);
 
+  const [logout] = useLogoutMutation()
+
   const theme = getTheme(themeMode);
 
   // CallBack для изменеия темы приложения
@@ -28,7 +33,13 @@ export function Header() {
     dispatch(changeTheme({ themeMode: themeMode === "light" ? "dark" : "light" }));
   };
   const logoutHandler = () => {
-    dispatch(logoutTC())
+    logout().then((res) => {
+      if (res.data?.resultCode === ResultCode.Success) {
+        dispatch(setIsLoggedIn({ isLoggedIn: false }));
+        dispatch(clearState());
+        localStorage.removeItem('sn-token')
+      }
+    })
   }
 
   return (

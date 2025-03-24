@@ -1,35 +1,22 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
 
 export type ThemeMode = "dark" | "light";
-export type RequestStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
-
-
-// type InitialState = typeof initialState;
-
-// type ChangeThemeActionType = ReturnType<typeof changeThemeAC>;
-// type ChangeStatusActionType = ReturnType<typeof setAppStatusAC>
-// type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>
-
-// type ActionsType = ChangeThemeActionType | ChangeStatusActionType | SetAppErrorActionType;
-
-// const initialState = {
-//   themeMode: "light" as ThemeMode,
-//   status: 'idle' as RequestStatus,
-//   error: null as string | null
-// };
-
+export type RequestStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
 
 export const appSlice = createSlice({
   name: 'app',
   initialState: {
     themeMode: "light" as ThemeMode,
     status: 'idle' as RequestStatus,
-    error: null as string | null
+    error: null as string | null,
+    isLoggedIn: false,
   },
   selectors: {
     selectAppError: (state) => state.error,
     selectAppThemeMode: (state) => state.themeMode,
-    selectAppStatus: (state) => state.status
+    selectAppStatus: (state) => state.status,
+    selectIsLoggedIn: (state) => state.isLoggedIn,
   },
   reducers: create => ({
     changeTheme: create.reducer<{ themeMode: ThemeMode }>((state, action) => {
@@ -40,38 +27,13 @@ export const appSlice = createSlice({
     }),
     setAppError: create.reducer<{ error: string | null }>((state, action) => {
       state.error = action.payload.error
-    })
+    }),
+    setIsLoggedIn: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
+      state.isLoggedIn = action.payload.isLoggedIn
+    }),
   })
 })
 
 export const appReducer = appSlice.reducer;
-export const { changeTheme, setAppStatus, setAppError } = appSlice.actions;
-export const { selectAppError, selectAppThemeMode, selectAppStatus } = appSlice.selectors;
-
-
-
-
-
-
-// export const appReducer = (state: InitialState = initialState, action: ActionsType): InitialState => {
-//   switch (action.type) {
-//     case "CHANGE_THEME":
-//       return { ...state, themeMode: action.themeMode };
-//     case 'SET_STATUS':
-//       return { ...state, status: action.status }
-//     case 'SET_ERROR':
-//       return { ...state, error: action.payload.error }
-//     default:
-//       return state;
-//   }
-// };
-
-// export const changeThemeAC = (themeMode: ThemeMode) => {
-//   return { type: "CHANGE_THEME", themeMode } as const;
-// };
-// export const setAppStatusAC = (status: RequestStatus) => {
-//   return { type: 'SET_STATUS', status } as const
-// };
-// export const setAppErrorAC = (error: string | null) => {
-//   return { type: 'SET_ERROR', payload: { error } } as const
-// };
+export const { changeTheme, setAppStatus, setAppError, setIsLoggedIn } = appSlice.actions;
+export const { selectAppError, selectAppThemeMode, selectAppStatus, selectIsLoggedIn } = appSlice.selectors;

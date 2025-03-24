@@ -9,30 +9,23 @@ import TextField from '@mui/material/TextField'
 import { useAppSelector } from 'common/hooks/useAppSelector'
 import { getTheme } from 'common/theme/theme'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import styles from "./Login.module.css"
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
-import { loginTC, selectIsLoggedIn } from 'features/auth/model/authSlice'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { Path } from 'common/routing/Routing'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Inputs, loginSchema } from 'features/auth/lib/schemas/loginSchema'
-import { selectAppThemeMode } from 'app/appSlice'
-
-
-// export type LoginInputs = {
-//     email: string
-//     password: string
-//     rememberMe: boolean
-//     captcha?: string,
-// }
+import { selectAppThemeMode, selectIsLoggedIn, setIsLoggedIn } from 'app/appSlice'
+import { useLoginMutation } from 'features/auth/api/authApi'
+import { ResultCode } from 'common/enums/enums'
+import styles from "./Login.module.css"
 
 export const Login = () => {
     const themeMode = useAppSelector(selectAppThemeMode)
     const theme = getTheme(themeMode)
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
+    const [login] = useLoginMutation();
     const isLoggedin = useAppSelector(selectIsLoggedIn);
 
     const {
@@ -44,8 +37,13 @@ export const Login = () => {
     } = useForm<Inputs>({ resolver: zodResolver(loginSchema), defaultValues: { email: "", password: "", rememberMe: false } })
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        dispatch(loginTC(data))
-        reset();
+        login(data).then((res) => {
+            if (res.data?.resultCode === ResultCode.Success) {
+                dispatch(setIsLoggedIn({ isLoggedIn: true }));
+                localStorage.setItem('sn-token', res.data.data.token)
+                reset();
+            }
+        })
     }
 
     useEffect(() => {
@@ -93,7 +91,6 @@ export const Login = () => {
                                 )}
                             />
                         } />
-
                         <Button type="submit" variant="contained" color="primary">
                             Login
                         </Button>

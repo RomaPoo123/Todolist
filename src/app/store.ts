@@ -2,14 +2,13 @@ import { todolistsApiTwo } from './../features/todolists/api/todolistsApi';
 import { appReducer, appSlice } from "./appSlice";
 import { tasksReducer, tasksSlice } from "../features/todolists/model/tasksSlice";
 import { todolistReducer, todolistSlice } from "../features/todolists/model/todolistSlice";
-import { authReducer, authSlice } from "features/auth/model/authSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from '@reduxjs/toolkit/query';
+import { authApiTwo } from 'features/auth/api/authApi';
 
 export const store = configureStore({
   reducer: {
     [appSlice.name]: appReducer,
-    [authSlice.name]: authReducer,
     [todolistSlice.name]: todolistReducer,
     [tasksSlice.name]: tasksReducer,
     [todolistsApiTwo.reducerPath]: todolistsApiTwo.reducer
