@@ -1,6 +1,59 @@
 import { DomainTask, GetTasksResponse, UpdateTaskModel } from "./tasksApi.types";
 import { instance } from "../../../common/instance/instance";
 import { BaseResponse } from "../../../common/types/types";
+import { baseApi } from "app/baseApi";
+
+
+export const tasksApiTwo = baseApi.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      getTasks: builder.query<DomainTask[], string>({
+        query: (todolistId) => {
+          return {
+            method: "GET",
+            url: `todo-lists/${todolistId}/tasks`
+          }
+        }
+      }),
+      createTask: builder.mutation<BaseResponse<{ item: DomainTask }>, { todolistId: string, title: string }>({
+        query: ({ todolistId, title }) => {
+          return {
+            method: "GET",
+            url: `todo-lists/${todolistId}/tasks`,
+            body: { title }
+          }
+        }
+      }),
+      removeTask: builder.mutation<BaseResponse, { todolistId: string, taskId: string }>({
+        query: ({ todolistId, taskId }) => {
+          return {
+            method: "DELETE",
+            url: `todo-lists/${todolistId}/tasks/${taskId}`
+          }
+        }
+      }),
+      updateTask: builder.mutation<BaseResponse<{ item: DomainTask }>, { todolistId: string, taskId: string, model: UpdateTaskModel }>({
+        query: ({ todolistId, taskId, model }) => {
+          return {
+            method: "PUT",
+            url: `todo-lists/${todolistId}/tasks/${taskId}`,
+            body: { model }
+          }
+        }
+      }),
+    }
+  }
+})
+
+export const {
+  useGetTasksQuery,
+  useCreateTaskMutation,
+  useRemoveTaskMutation,
+  useUpdateTaskMutation } = tasksApiTwo
+
+
+
+
 
 export const tasksApi = {
   getTasks(todolistId: string) {

@@ -12,7 +12,6 @@ type Props = {
 };
 
 export const TodolistTitle = ({ todolist }: Props) => {
-  const dispatch = useAppDispatch();
   const [removeTodolist] = useRemoveTodolistMutation();
   const [updateTodolist] = useUpdateTodolistMutation();
   const { title, id, entityStatus } = todolist;
