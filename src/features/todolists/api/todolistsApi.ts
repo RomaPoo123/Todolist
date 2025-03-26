@@ -49,7 +49,7 @@ export const todolistsApiTwo = baseApi.injectEndpoints({
           }
         },
         invalidatesTags: ["Todolist"]
-      })
+      }),
     }
   }
 })

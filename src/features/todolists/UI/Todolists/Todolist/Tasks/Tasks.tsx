@@ -7,6 +7,7 @@ import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { fetchTasksTC, selectTasks } from "features/todolists/model/tasksSlice";
 import { TaskStatus } from "common/enums/enums";
 import s from "./Tasks.module.css"
+import { useGetTasksQuery } from "features/todolists/api/tasksApi";
 type Props = {
   todolist: DomainTodolist;
 };
@@ -15,23 +16,24 @@ export const Tasks = ({ todolist }: Props) => {
   // берем часть Store, а именно tasks
   const tasks = useAppSelector(selectTasks);
   const dispatch = useAppDispatch();
+  const { data } = useGetTasksQuery(todolist.id);
 
   useEffect(() => {
-    dispatch(fetchTasksTC({ todolistId: todolist.id }));
+    // dispatch(fetchTasksTC({ todolistId: todolist.id }));
   }, []);
 
   // кладем в переменую таски тудулиста
-  const allTodolistTasks = tasks[todolist.id];
+  const allTodolistTasks = data
 
   let tasksForTodolist = allTodolistTasks;
 
   //  если значение filter active филтруем таски
   if (todolist.filter === "active") {
-    tasksForTodolist = allTodolistTasks.filter((task) => task.status === TaskStatus.New);
+    tasksForTodolist = allTodolistTasks?.filter((task) => task.status === TaskStatus.New);
   }
   //  если значение completed active филтруем таски
   if (todolist.filter === "completed") {
-    tasksForTodolist = allTodolistTasks.filter((task) => task.status === TaskStatus.Completed);
+    tasksForTodolist = allTodolistTasks?.filter((task) => task.status === TaskStatus.Completed);
   }
 
   return (

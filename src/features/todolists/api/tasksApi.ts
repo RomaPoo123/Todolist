@@ -13,7 +13,8 @@ export const tasksApiTwo = baseApi.injectEndpoints({
             method: "GET",
             url: `todo-lists/${todolistId}/tasks`
           }
-        }
+        },
+        providesTags: ["Task"]
       }),
       createTask: builder.mutation<BaseResponse<{ item: DomainTask }>, { todolistId: string, title: string }>({
         query: ({ todolistId, title }) => {
@@ -22,7 +23,8 @@ export const tasksApiTwo = baseApi.injectEndpoints({
             url: `todo-lists/${todolistId}/tasks`,
             body: { title }
           }
-        }
+        },
+        invalidatesTags: ['Task']
       }),
       removeTask: builder.mutation<BaseResponse, { todolistId: string, taskId: string }>({
         query: ({ todolistId, taskId }) => {
@@ -30,7 +32,8 @@ export const tasksApiTwo = baseApi.injectEndpoints({
             method: "DELETE",
             url: `todo-lists/${todolistId}/tasks/${taskId}`
           }
-        }
+        },
+        invalidatesTags: ['Task']
       }),
       updateTask: builder.mutation<BaseResponse<{ item: DomainTask }>, { todolistId: string, taskId: string, model: UpdateTaskModel }>({
         query: ({ todolistId, taskId, model }) => {
@@ -39,7 +42,8 @@ export const tasksApiTwo = baseApi.injectEndpoints({
             url: `todo-lists/${todolistId}/tasks/${taskId}`,
             body: { model }
           }
-        }
+        },
+        invalidatesTags: ['Task']
       }),
     }
   }

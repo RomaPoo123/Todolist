@@ -12,6 +12,7 @@ import { EditableSpan } from "common/components";
 import { DomainTask } from "features/todolists/api/tasksApi.types";
 import { TaskStatus } from "common/enums/enums";
 import s from './Task.module.css'
+import { useRemoveTaskMutation } from "features/todolists/api/tasksApi";
 
 export type TaskPropsType = {
   todolist: DomainTodolist;
@@ -22,11 +23,13 @@ export const Task = React.memo(({ task, todolist }: TaskPropsType) => {
   // Data
   const dispatch = useAppDispatch();
   const { id } = todolist;
+  const [removeTask] = useRemoveTaskMutation()
 
   // Функция-обертка для функции удаления тасок (removeTaskHandler)
   const removeTaskCallback = useCallback(
     (taskId: string) => {
-      dispatch(removeTaskTC({ todolistId: id, taskId }));
+      removeTask({ todolistId: id, taskId })
+      // dispatch(removeTaskTC({ todolistId: id, taskId }));
     },
     [dispatch, id],
   );
