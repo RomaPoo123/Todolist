@@ -1,6 +1,7 @@
 import { Grid, Paper } from "@mui/material";
 import { Todolist } from "./Todolist/Todolist";
 import { useGetTodolistsQuery } from "features/todolists/api/todolistsApi";
+import { DomainTodolist } from "features/todolists/model/todolistSlice";
 
 export const Todolists = () => {
 
@@ -8,7 +9,7 @@ export const Todolists = () => {
 
   return (
     <>
-      {todolists?.map((tl: any) => {
+      {todolists?.map((tl: DomainTodolist) => {
         return (
           <Grid item key={tl.id}>
             <Paper elevation={3} style={{ padding: "25px" }}>

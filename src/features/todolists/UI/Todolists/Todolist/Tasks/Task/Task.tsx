@@ -2,17 +2,12 @@ import React, { ChangeEvent, useCallback } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Checkbox from "@mui/material/Checkbox";
-import { useAppDispatch } from "../../../../../../../common/hooks/useAppDispatch";
-import {
-  removeTaskTC,
-  updateTaskTC,
-} from "../../../../../model/tasksSlice";
 import { DomainTodolist } from "../../../../../model/todolistSlice";
 import { EditableSpan } from "common/components";
-import { DomainTask } from "features/todolists/api/tasksApi.types";
+import { DomainTask, UpdateTaskModel } from "features/todolists/api/tasksApi.types";
 import { TaskStatus } from "common/enums/enums";
+import { useRemoveTaskMutation, useUpdateTaskMutation } from "features/todolists/api/tasksApi";
 import s from './Task.module.css'
-import { useRemoveTaskMutation } from "features/todolists/api/tasksApi";
 
 export type TaskPropsType = {
   todolist: DomainTodolist;
@@ -21,25 +16,31 @@ export type TaskPropsType = {
 
 export const Task = React.memo(({ task, todolist }: TaskPropsType) => {
   // Data
-  const dispatch = useAppDispatch();
   const { id } = todolist;
   const [removeTask] = useRemoveTaskMutation()
+  const [updateTask] = useUpdateTaskMutation()
+
+  const model: UpdateTaskModel = {
+    status: task.status,
+    title: task.title,
+    deadline: task.deadline,
+    description: task.description,
+    priority: task.priority,
+    startDate: task.startDate,
+  };
 
   // Функция-обертка для функции удаления тасок (removeTaskHandler)
-  const removeTaskCallback = useCallback(
-    (taskId: string) => {
-      removeTask({ todolistId: id, taskId })
-      // dispatch(removeTaskTC({ todolistId: id, taskId }));
-    },
-    [dispatch, id],
-  );
+  const removeTaskCallback = (taskId: string) => {
+    removeTask({ todolistId: id, taskId })
+  };
 
   const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     let status: TaskStatus = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New;
-    dispatch(updateTaskTC({ task: { ...task, status } }));
+    updateTask({ todolistId: id, taskId: task.id, model: { ...model, status } })
   };
-  const onChangeTitleHandler = (newTitle: string) => {
-    dispatch(updateTaskTC({ task: { ...task, title: newTitle } }));
+
+  const onChangeTitleHandler = (title: string) => {
+    updateTask({ todolistId: id, taskId: task.id, model: { ...model, title } })
   };
 
   return (

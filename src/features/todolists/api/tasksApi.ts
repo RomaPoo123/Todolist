@@ -7,7 +7,7 @@ import { baseApi } from "app/baseApi";
 export const tasksApiTwo = baseApi.injectEndpoints({
   endpoints: (builder) => {
     return {
-      getTasks: builder.query<DomainTask[], string>({
+      getTasks: builder.query<GetTasksResponse, string>({
         query: (todolistId) => {
           return {
             method: "GET",
@@ -19,7 +19,7 @@ export const tasksApiTwo = baseApi.injectEndpoints({
       createTask: builder.mutation<BaseResponse<{ item: DomainTask }>, { todolistId: string, title: string }>({
         query: ({ todolistId, title }) => {
           return {
-            method: "GET",
+            method: "POST",
             url: `todo-lists/${todolistId}/tasks`,
             body: { title }
           }
@@ -40,14 +40,14 @@ export const tasksApiTwo = baseApi.injectEndpoints({
           return {
             method: "PUT",
             url: `todo-lists/${todolistId}/tasks/${taskId}`,
-            body: { model }
+            body: model
           }
         },
         invalidatesTags: ['Task']
       }),
     }
   }
-})
+});
 
 export const {
   useGetTasksQuery,

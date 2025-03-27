@@ -4,18 +4,19 @@ import { Task } from "./Task/Task";
 import { DomainTodolist } from "features/todolists/model/todolistSlice";
 import { useEffect } from "react";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { fetchTasksTC, selectTasks } from "features/todolists/model/tasksSlice";
+// import { fetchTasksTC, selectTasks } from "features/todolists/model/tasksSlice";
 import { TaskStatus } from "common/enums/enums";
 import s from "./Tasks.module.css"
 import { useGetTasksQuery } from "features/todolists/api/tasksApi";
+import { DomainTask } from "features/todolists/api/tasksApi.types";
 type Props = {
   todolist: DomainTodolist;
 };
 
 export const Tasks = ({ todolist }: Props) => {
   // берем часть Store, а именно tasks
-  const tasks = useAppSelector(selectTasks);
-  const dispatch = useAppDispatch();
+  // const tasks = useAppSelector(selectTasks);
+  // const dispatch = useAppDispatch();
   const { data } = useGetTasksQuery(todolist.id);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export const Tasks = ({ todolist }: Props) => {
   }, []);
 
   // кладем в переменую таски тудулиста
-  const allTodolistTasks = data
+  const allTodolistTasks = data?.items
 
   let tasksForTodolist = allTodolistTasks;
 
@@ -42,7 +43,7 @@ export const Tasks = ({ todolist }: Props) => {
         <span>Тасок нет</span>
       ) : (
         <List className={s.tasks}>
-          {tasksForTodolist?.map((task) => {
+          {tasksForTodolist?.map((task: DomainTask) => {
             return <Task todolist={todolist} task={task} />;
           })}
         </List>
