@@ -8,13 +8,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Switch } from "@mui/material";
 import LinearProgress from '@mui/material/LinearProgress';
 import { MenuButton } from "../MenuButton/MenuButton";
-import { getTheme } from "../../theme/theme";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { changeTheme, selectAppStatus, selectAppThemeMode, selectIsLoggedIn, setIsLoggedIn } from "../../../app/appSlice";
 import { useLogoutMutation } from "features/auth/api/authApi";
-import { clearState } from "common/actions/clearState";
 import { ResultCode } from "common/enums/enums";
+import { baseApi } from "app/baseApi";
 
 
 
@@ -26,7 +25,7 @@ export function Header() {
 
   const [logout] = useLogoutMutation()
 
-  const theme = getTheme(themeMode);
+  // const theme = getTheme(themeMode);
 
   // CallBack для изменеия темы приложения
   const changeModeHandler = () => {
@@ -36,9 +35,10 @@ export function Header() {
     logout().then((res) => {
       if (res.data?.resultCode === ResultCode.Success) {
         dispatch(setIsLoggedIn({ isLoggedIn: false }));
-        dispatch(clearState());
         localStorage.removeItem('sn-token')
       }
+    }).then(() => {
+      dispatch(baseApi.util.invalidateTags(['Todolist', 'Task']))
     })
   }
 

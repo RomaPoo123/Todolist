@@ -1,27 +1,23 @@
 import { List } from "@mui/material";
-import { useAppSelector } from "../../../../../../common/hooks/useAppSelector";
 import { Task } from "./Task/Task";
-import { DomainTodolist } from "features/todolists/model/todolistSlice";
-import { useEffect } from "react";
-import { useAppDispatch } from "common/hooks/useAppDispatch";
-// import { fetchTasksTC, selectTasks } from "features/todolists/model/tasksSlice";
 import { TaskStatus } from "common/enums/enums";
 import s from "./Tasks.module.css"
 import { useGetTasksQuery } from "features/todolists/api/tasksApi";
 import { DomainTask } from "features/todolists/api/tasksApi.types";
+import { TasksSkeleton } from "features/todolists/UI/skeleton/TasksSkeleton/TasksSkeleton";
+import { DomainTodolist } from "features/todolists/lib/types/types";
 type Props = {
   todolist: DomainTodolist;
 };
 
 export const Tasks = ({ todolist }: Props) => {
-  // берем часть Store, а именно tasks
-  // const tasks = useAppSelector(selectTasks);
-  // const dispatch = useAppDispatch();
-  const { data } = useGetTasksQuery(todolist.id);
+  const { data, isLoading } = useGetTasksQuery(todolist.id);
 
-  useEffect(() => {
-    // dispatch(fetchTasksTC({ todolistId: todolist.id }));
-  }, []);
+
+  if (isLoading) {
+    return <TasksSkeleton />
+  }
+
 
   // кладем в переменую таски тудулиста
   const allTodolistTasks = data?.items
@@ -36,6 +32,7 @@ export const Tasks = ({ todolist }: Props) => {
   if (todolist.filter === "completed") {
     tasksForTodolist = allTodolistTasks?.filter((task) => task.status === TaskStatus.Completed);
   }
+
 
   return (
     <>

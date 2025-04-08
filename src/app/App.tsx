@@ -6,12 +6,10 @@ import { useAppSelector } from "../common/hooks/useAppSelector";
 import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
 import { Routing } from "common/routing/Routing";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
-
-import s from "./App.module.css"
-import "./App.css";
-import { selectAppThemeMode, setAppStatus, setIsLoggedIn } from "./appSlice";
+import { selectAppThemeMode, setIsLoggedIn } from "./appSlice";
 import { useMeQuery } from "features/auth/api/authApi";
 import { ResultCode } from "common/enums/enums";
+import s from "./App.module.css"
 
 
 const App = React.memo(() => {

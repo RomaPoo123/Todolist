@@ -1,8 +1,8 @@
 import { useAppDispatch } from "../../../../../../common/hooks/useAppDispatch";
-import { useCallback } from "react";
-import { changeFilterTodolist, FilterValueType, DomainTodolist } from "../../../../model/todolistSlice";
 import { Box, Button } from "@mui/material";
 import s from './FilterTasksButton.module.css'
+import { todolistsApiTwo } from "features/todolists/api/todolistsApi";
+import { DomainTodolist, FilterValueType } from "features/todolists/lib/types/types";
 
 type Props = {
   todolist: DomainTodolist;
@@ -14,12 +14,20 @@ export const FilterTasksButtons = ({ todolist }: Props) => {
   const dispatch = useAppDispatch();
 
   // пуш отфильтрованного массива тасок в стейт
-  const cahgeFilterHandler = useCallback(
+  const cahgeFilterHandler =
     (filter: FilterValueType) => {
-      dispatch(changeFilterTodolist({ todolistId: id, filter }));
-    },
-    [dispatch],
-  );
+      dispatch(
+        todolistsApiTwo.util.updateQueryData(
+          "getTodolists",
+          undefined,
+          (todolists: DomainTodolist[]) => {
+            const todolist = todolists.find((todolist) => todolist.id === id)
+            if (todolist) {
+              todolist.filter = filter;
+            }
+          })
+      )
+    }
 
   return (
     <Box className={s.FiltertasksButton}>

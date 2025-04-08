@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { Container, Grid } from "@mui/material";
 import { AddItemForm } from "../common/components/AddItemForm/AddItemForm";
 import { Todolists } from "../features/todolists/UI/Todolists/Todolists";
@@ -10,10 +10,9 @@ import { selectIsLoggedIn } from "./appSlice";
 
 
 export const Main = () => {
-  // const dispatch = useAppDispatch();
   const isLoggedin = useAppSelector(selectIsLoggedIn);
   const navigate = useNavigate();
-  const [createTodolist, { data }] = useCreateTodolistMutation();
+  const [createTodolist] = useCreateTodolistMutation();
 
 
   useEffect(() => {
@@ -23,12 +22,10 @@ export const Main = () => {
   }, [isLoggedin])
 
 
-  const addTodolist = useCallback(
+  const addTodolist =
     (title: string) => {
       createTodolist(title)
-    },
-    [],
-  );
+    }
 
   return (
     <Container fixed>

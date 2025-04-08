@@ -1,11 +1,28 @@
 import { Grid, Paper } from "@mui/material";
 import { Todolist } from "./Todolist/Todolist";
 import { useGetTodolistsQuery } from "features/todolists/api/todolistsApi";
-import { DomainTodolist } from "features/todolists/model/todolistSlice";
+import { TodolistSkeleton } from "../skeleton/TodolistSkeleton/TodolistSkeleton";
+import { DomainTodolist } from "features/todolists/lib/types/types";
+
+
+
+
 
 export const Todolists = () => {
 
-  const { data: todolists } = useGetTodolistsQuery()
+  const { data: todolists, isLoading } = useGetTodolistsQuery()
+
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "space-between", gap: "32px" }}>
+        {Array(3)
+          .fill(null)
+          .map((_, id) => (
+            <TodolistSkeleton key={id} />
+          ))}
+      </div>
+    )
+  }
 
   return (
     <>

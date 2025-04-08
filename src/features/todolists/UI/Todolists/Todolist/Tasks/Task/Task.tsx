@@ -1,12 +1,12 @@
-import React, { ChangeEvent, useCallback } from "react";
+import React, { ChangeEvent } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Checkbox from "@mui/material/Checkbox";
-import { DomainTodolist } from "../../../../../model/todolistSlice";
 import { EditableSpan } from "common/components";
 import { DomainTask, UpdateTaskModel } from "features/todolists/api/tasksApi.types";
 import { TaskStatus } from "common/enums/enums";
 import { useRemoveTaskMutation, useUpdateTaskMutation } from "features/todolists/api/tasksApi";
+import { DomainTodolist } from "features/todolists/lib/types/types";
 import s from './Task.module.css'
 
 export type TaskPropsType = {

@@ -37,7 +37,7 @@ export const authApiTwo = baseApi.injectEndpoints({
 
 export const { useLoginMutation, useLogoutMutation, useMeQuery } = authApiTwo
 
-
+// Для удаления
 export const authApi = {
     login: (payload: Inputs) => {
         return instance.post<BaseResponse<{ userId: number, token: string }>>("auth/Login", payload)

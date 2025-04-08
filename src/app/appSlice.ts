@@ -1,4 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit";
+import { todolistsApiTwo } from 'features/todolists/api/todolistsApi';
+import { tasksApiTwo } from 'features/todolists/api/tasksApi';
 
 
 export type ThemeMode = "dark" | "light";
@@ -31,7 +33,28 @@ export const appSlice = createSlice({
     setIsLoggedIn: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn
     }),
-  })
+  }),
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      isPending,
+      (state, action) => {
+        if (
+          todolistsApiTwo.endpoints.getTodolists.matchPending(action) ||
+          tasksApiTwo.endpoints.getTasks.matchPending(action)
+        )
+          state.status = "loading"
+      })
+      .addMatcher(
+        isFulfilled,
+        (state) => {
+          state.status = "succeeded"
+        })
+      .addMatcher(
+        isRejected,
+        (state) => {
+          state.status = "failed"
+        })
+  }
 })
 
 export const appReducer = appSlice.reducer;
