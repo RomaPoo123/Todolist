@@ -20,7 +20,7 @@ export type DomainTask = z.infer<typeof DomainTaskSchema>
 // Получение Tasks с сервера
 export type GetTasksResponse = {
   error: string | null;
-  totalcount: number;
+  totalCount: number;
   items: DomainTask[];
 };
 // Типизация изменения Status таски PUT

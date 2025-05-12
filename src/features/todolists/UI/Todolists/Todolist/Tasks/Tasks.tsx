@@ -6,12 +6,21 @@ import { useGetTasksQuery } from "features/todolists/api/tasksApi";
 import { DomainTask } from "features/todolists/api/tasksApi.types";
 import { TasksSkeleton } from "features/todolists/UI/skeleton/TasksSkeleton/TasksSkeleton";
 import { DomainTodolist } from "features/todolists/lib/types/types";
+import { useState } from "react";
+import { TasksPagination } from "./TasksPagination/TasksPagination";
 type Props = {
   todolist: DomainTodolist;
 };
 
 export const Tasks = ({ todolist }: Props) => {
-  const { data, isLoading } = useGetTasksQuery(todolist.id);
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isFetching, currentData } = useGetTasksQuery({
+    todolistId: todolist.id,
+    params: { page },
+  });
+
+  // console.log({ "isLoading": isLoading, "isFetching": isFetching });
+  console.log({ data, currentData })
 
 
   if (isLoading) {
@@ -39,11 +48,14 @@ export const Tasks = ({ todolist }: Props) => {
       {tasksForTodolist?.length === 0 ? (
         <span>Тасок нет</span>
       ) : (
-        <List className={s.tasks}>
-          {tasksForTodolist?.map((task: DomainTask) => {
-            return <Task todolist={todolist} task={task} />;
-          })}
-        </List>
+        <>
+          <List className={s.tasks}>
+            {tasksForTodolist?.map((task: DomainTask) => {
+              return <Task key={task.id} todolist={todolist} task={task} />;
+            })}
+          </List>
+          <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
+        </>
       )}
     </>
   );

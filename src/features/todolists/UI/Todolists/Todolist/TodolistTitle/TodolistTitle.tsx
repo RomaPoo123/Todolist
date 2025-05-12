@@ -38,7 +38,7 @@ export const TodolistTitle = ({ todolist }: Props) => {
     removeTodolist(id)
       .unwrap()
       .catch(() => {
-        updateQueryData("failed");
+        updateQueryData("failed"); //!!!!!!
       })
   };
   // Функция которая принимает измененный titleTodolist и заносит его в стейт
